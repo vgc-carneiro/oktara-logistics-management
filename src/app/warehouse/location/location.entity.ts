@@ -1,4 +1,4 @@
-import { PackageEntity } from 'src/app/package/package.entity';
+import { PackageEntity } from '../../package/package.entity';
 import {
   Column,
   CreateDateColumn,

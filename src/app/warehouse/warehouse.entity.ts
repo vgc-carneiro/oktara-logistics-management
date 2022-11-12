@@ -45,7 +45,7 @@ export class WarehouseEntity {
   })
   locations: LocationEntity[];
 
-  fromDomain(warehouse: Warehouse) {
+  fromDomain?(warehouse: Warehouse) {
     if (warehouse.id) this.id = warehouse.id;
     this.name = warehouse.name;
     this.latitude = warehouse.latitude;

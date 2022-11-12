@@ -5,9 +5,9 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { Controller, Get, Res } from '@nestjs/common';
-import { ExceptionControllerHandler } from 'src/extensions/exception.controller.handler';
 import { Response } from 'express';
 import { WarehouseService } from './warehouse.service';
+import { ExceptionControllerHandler } from '../../extensions/exception.controller.handler';
 
 @ApiTags('Warehouses')
 @Controller('api/warehouses')
@@ -29,11 +29,11 @@ export class WarehouseController extends ExceptionControllerHandler {
     description: 'Not found any warehouse.',
   })
   @Get()
-  async list(@Res({ passthrough: true }) res: Response) {
+  async list() {
     try {
       return await this.service.list();
     } catch (error) {
-      this.handleResponseError(error, res);
+      this.handleResponseError(error);
     }
   }
 }

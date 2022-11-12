@@ -1,8 +1,7 @@
-import { HttpStatus } from '@nestjs/common';
-import { Response } from 'express';
+import { HttpException, HttpStatus } from '@nestjs/common';
 
 export class ExceptionControllerHandler {
-  handleResponseError(e: Error, response: Response) {
+  handleResponseError(e: Error) {
     let statusCode = HttpStatus.INTERNAL_SERVER_ERROR;
     let statusMsg = e.message;
 
@@ -15,6 +14,6 @@ export class ExceptionControllerHandler {
         break;
     }
 
-    response.status(statusCode).json({ error: statusMsg });
+    throw new HttpException(statusMsg, statusCode);
   }
 }
