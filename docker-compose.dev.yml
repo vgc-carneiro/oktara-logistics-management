@@ -36,11 +36,11 @@ services:
       - DATABASE_USER=postgres
       - DATABASE_PASSWORD=admin
       - DATABASE_SCHEMA=public
-      - MIGRATION_PATH=./dist/migrations/*.js
+      - MIGRATION_PATH=./dist/infrastructure/migrations/*.js
       - MIGRATION_TABLE=migrations
       - PATH_ENTITIES=./../**/*.entity.js
       - ENABLE_SEED=false
-    command: npm run start:dev
+    command: npm run start:dev:migration
     ports:
       - 3335:3335
 volumes:
