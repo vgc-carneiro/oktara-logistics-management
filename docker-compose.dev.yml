@@ -28,6 +28,18 @@ services:
       - api-logistics-manager-nodemodules:/usr/src/app/node_modules
       - .:/usr/src/app
     working_dir: /usr/src/app
+    environment:
+      - NODE_ENV=development
+      - DATABASE_HOST=logistics-manager-postgres
+      - DATABASE_PORT=5432
+      - DATABASE_DATABASE=logistics
+      - DATABASE_USER=postgres
+      - DATABASE_PASSWORD=admin
+      - DATABASE_SCHEMA=public
+      - MIGRATION_PATH=./dist/migrations/*.js
+      - MIGRATION_TABLE=migrations
+      - PATH_ENTITIES=./../**/*.entity.js
+      - ENABLE_SEED=false
     command: npm run start:dev
     ports:
       - 3335:3335
