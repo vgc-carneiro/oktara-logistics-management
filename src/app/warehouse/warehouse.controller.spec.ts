@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { warehouseMocked } from '../../../test/mocks/warehouse.mock';
+import { warehouseMocked } from '../../mocks/warehouse.mock';
 import { WarehouseController } from './warehouse.controller';
 import { WarehouseService } from './warehouse.service';
 

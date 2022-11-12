@@ -58,7 +58,7 @@ export class PackageEntity {
   })
   location?: LocationEntity;
 
-  fromDomain(domain: Package) {
+  fromDomain?(domain: Package) {
     if (domain.id) this.id = domain.id;
     if (domain.shipment_id) this.shipment_id = domain.shipment_id;
     this.status_id = domain.status_id;
