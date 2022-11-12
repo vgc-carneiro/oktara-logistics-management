@@ -1,0 +1,19 @@
+version: '3.7'
+services:
+  app:
+    build: .
+    image: api-logistics-manager:dev
+    container_name: api-logistics-manager
+    hostname: localhost
+    volumes:
+      - api-logistics-manager-nodemodules:/usr/src/app/node_modules
+      - .:/usr/src/app
+    environment:
+      - NODE_ENV=test
+    working_dir: /usr/src/app
+    command: npm test
+    ports:
+      - 3335:3335
+volumes:
+  api-logistics-manager-nodemodules:
+    external: true

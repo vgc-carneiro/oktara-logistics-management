@@ -1,0 +1,12 @@
+version: '3.7'
+services:
+  install:
+    image: node:18.12-alpine3.15
+    volumes:
+      - api-logistics-manager-nodemodules:/usr/src/app/node_modules
+      - .:/usr/src/app/
+    working_dir: /usr/src/app/
+    command: npm install
+volumes:
+  api-logistics-manager-nodemodules:
+    external: true
