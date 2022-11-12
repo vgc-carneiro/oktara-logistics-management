@@ -13,7 +13,7 @@ describe('PackageController', () => {
   let responseMocked: ResponseMock;
 
   beforeEach(() => {
-    service = new PackageService();
+    service = new PackageService(null);
     controller = new PackageController(service);
     responseMocked = new ResponseMock();
   });
