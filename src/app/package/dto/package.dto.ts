@@ -1,17 +1,6 @@
-import {
-  IsDateString,
-  IsDefined,
-  IsNotEmpty,
-  IsNumber,
-  IsNumberString,
-  IsOptional,
-  IsString,
-  IsUUID,
-  MaxLength,
-  maxLength,
-} from 'class-validator';
+import { IsDefined, IsNumber } from 'class-validator';
 
-import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
+import { ApiProperty } from '@nestjs/swagger';
 
 export class PackageDTO {
   @IsDefined()

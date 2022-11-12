@@ -1,12 +1,23 @@
-import { Body, Controller, HttpStatus, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Get,
+  HttpStatus,
+  Param,
+  Post,
+  Res,
+} from '@nestjs/common';
 import {
   ApiBadRequestResponse,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
+  ApiOkResponse,
   ApiOperation,
   ApiTags,
 } from '@nestjs/swagger';
 import { ExceptionControllerHandler } from '../../extensions/exception.controller.handler';
 import { PackageDTO } from './dto/package.dto';
+import { PackageEntity } from './package.entity';
 import { PackageService } from './package.service';
 
 @ApiTags('Packages')
@@ -24,7 +35,6 @@ export class PackageController extends ExceptionControllerHandler {
     status: 201,
     description:
       'Indicates that resource was created. It will return a Header Location with the GET informations.',
-    type: PackageDTO,
   })
   @ApiBadRequestResponse({
     status: 400,
@@ -35,6 +45,31 @@ export class PackageController extends ExceptionControllerHandler {
     try {
       const result = await this.service.createPackage(pakage);
       res.status(HttpStatus.CREATED).set({ location: result.id });
+    } catch (error) {
+      this.handleResponseError(error);
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Retrieve a Package',
+    description: 'Retrive a specific Package',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Return a Package Object',
+  })
+  @ApiNotFoundResponse({
+    status: 404,
+    description: 'Package not found.',
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'Request Malformed',
+  })
+  @Get(':id')
+  async get(@Param('id') id: string) {
+    try {
+      return this.service.get(id);
     } catch (error) {
       this.handleResponseError(error);
     }

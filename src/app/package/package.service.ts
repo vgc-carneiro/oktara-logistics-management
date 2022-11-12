@@ -15,4 +15,8 @@ export class PackageService {
       throw new BadRequestException(error.message);
     }
   }
+
+  async get(id: string): Promise<PackageEntity> {
+    return null;
+  }
 }

@@ -28,7 +28,7 @@ describe('PackageController', () => {
       expect(responseMocked.code).toBe(HttpStatus.CREATED);
     });
 
-    it('should throw a NotFoundException', async () => {
+    it('should throw a BadRequestException', async () => {
       try {
         jest.spyOn(service, 'createPackage').mockImplementation(() => {
           throw new BadRequestException('Error to insert a Package.');
@@ -37,6 +37,28 @@ describe('PackageController', () => {
         expect(true).toBeFalsy();
       } catch (error) {
         expect(error.message).toBe('Error to insert a Package.');
+      }
+    });
+  });
+
+  describe('getPackage', () => {
+    it('should return a Package specific Package', async () => {
+      const pakage = packageWarehouseMock;
+
+      jest.spyOn(service, 'get').mockResolvedValue(pakage);
+      expect(await controller.get(pakage.id)).toBe(pakage);
+    });
+
+    it('should throw a NotFoundException', async () => {
+      const pakage = packageWarehouseMock;
+      jest.spyOn(service, 'get').mockImplementation(() => {
+        throw new Error('No package were found.');
+      });
+      try {
+        await controller.get(pakage.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No package were found.');
       }
     });
   });
