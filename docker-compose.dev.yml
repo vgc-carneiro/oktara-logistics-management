@@ -1,0 +1,36 @@
+version: '3.7'
+services:
+  postgres:
+    container_name: logistics-manager-postgres
+    build:
+      context: ./.postgres
+      dockerfile: Dockerfile
+    shm_size: 4g
+    ports:
+      - 5432:5432
+    volumes:
+      - './.postgres/data:/var/lib/postgresql/data:rw'
+    environment:
+      - POSTGRES_DB=logistics
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - PGDATA=/var/lib/postgresql/data
+      - POSTGRES_HOST_AUTH_METHOD=trust
+
+  app:
+    build: .
+    image: api-logistics-manager:dev
+    container_name: api-logistics-manager
+    hostname: localhost
+    links:
+      - postgres
+    volumes:
+      - api-logistics-manager-nodemodules:/usr/src/app/node_modules
+      - .:/usr/src/app
+    working_dir: /usr/src/app
+    command: npm run start:dev
+    ports:
+      - 3335:3335
+volumes:
+  api-logistics-manager-nodemodules:
+    external: true
