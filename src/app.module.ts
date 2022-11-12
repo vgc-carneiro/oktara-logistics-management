@@ -4,6 +4,7 @@ import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { HealthController } from './health/health.controller';
 import { DatabaseConfiguration } from './infrastructure/database/database.service';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
@@ -12,6 +13,6 @@ import { DatabaseConfiguration } from './infrastructure/database/database.servic
     WarehouseModule,
   ],
   controllers: [HealthController],
-  providers: [],
+  providers: [AppService],
 })
 export class AppModule {}

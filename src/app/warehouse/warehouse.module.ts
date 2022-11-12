@@ -5,11 +5,23 @@ import { WarehouseRepository } from './warehouse.repository';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { WarehouseEntity } from './warehouse.entity';
 import { LocationEntity } from './location/location.entity';
+import { LocationRepository } from './location/location.repository';
+import { WarehouseSeeder } from './warehouse.seeder';
 
 @Module({
   imports: [TypeOrmModule.forFeature([WarehouseEntity, LocationEntity])],
   controllers: [WarehouseController],
-  providers: [WarehouseService, WarehouseRepository],
-  exports: [WarehouseService, WarehouseRepository],
+  providers: [
+    LocationRepository,
+    WarehouseSeeder,
+    WarehouseService,
+    WarehouseRepository,
+  ],
+  exports: [
+    LocationRepository,
+    WarehouseSeeder,
+    WarehouseService,
+    WarehouseRepository,
+  ],
 })
 export class WarehouseModule {}
