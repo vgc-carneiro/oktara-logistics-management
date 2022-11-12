@@ -1,3 +1,4 @@
+import { WarehouseModule } from './app/warehouse/warehouse.module';
 import { Module } from '@nestjs/common';
 import { TerminusModule } from '@nestjs/terminus';
 import { TypeOrmModule } from '@nestjs/typeorm';
@@ -6,8 +7,9 @@ import { DatabaseConfiguration } from './infrastructure/database/database.servic
 
 @Module({
   imports: [
-    TypeOrmModule.forRootAsync({ useClass: DatabaseConfiguration }),
     TerminusModule,
+    TypeOrmModule.forRootAsync({ useClass: DatabaseConfiguration }),
+    WarehouseModule,
   ],
   controllers: [HealthController],
   providers: [],
