@@ -39,7 +39,7 @@ services:
       - MIGRATION_PATH=./dist/infrastructure/migrations/*.js
       - MIGRATION_TABLE=migrations
       - PATH_ENTITIES=./../**/*.entity.js
-      - ENABLE_SEED=false
+      - ENABLE_SEED=true
     command: npm run start:dev:migration
     ports:
       - 3335:3335

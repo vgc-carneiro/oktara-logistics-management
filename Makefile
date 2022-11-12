@@ -6,5 +6,5 @@ dev:
 	docker-compose -f docker-compose.dev.yml up
 tests:
 	docker-compose -f docker-compose.test.yml up
-coverage:
+cover:
 	docker-compose -f docker-compose.test.cov.yml up

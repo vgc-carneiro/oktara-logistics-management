@@ -48,7 +48,7 @@ $ docker-compose -f docker-compose.test.yml up
 # With Make
 $ make setup
 $ make install
-$ make coverage
+$ make cover
 
 # Without Make
 $ docker volume create api-log-manager-nodemodules
