@@ -10,6 +10,7 @@ import {
 import {
   shipmentMock,
   shipmentNotAvailableMock,
+  shipmentReadyToBeDeliveredMock,
 } from '../../mocks/shipment.mock';
 import { ShipmentRepository } from '../shipment/shipment.repository';
 import { LocationRepository } from '../warehouse/location/location.repository';
@@ -247,12 +248,22 @@ describe('PackageService', () => {
 
     it('should return a Package delivered.', async () => {
       const pakage = packageTransitMock;
+      const shipment = shipmentReadyToBeDeliveredMock;
 
       jest.spyOn(repository, 'get').mockResolvedValue(pakage);
       jest.spyOn(repository, 'update').mockImplementationOnce(async () => {
         pakage.status_id = EStatusPackage.DELIVERED;
         return pakage;
       });
+
+      jest.spyOn(shipmentRepository, 'get').mockResolvedValue(shipment);
+      jest
+        .spyOn(shipmentRepository, 'update')
+        .mockImplementationOnce(async () => {
+          shipment.finished_route = new Date();
+          return shipment;
+        });
+
       const result = await service.deliver(pakage.id);
       expect(result.status_id).toBe(EStatusPackage.DELIVERED);
     });

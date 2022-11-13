@@ -55,6 +55,25 @@ const shipmentNotAvailableMock: ShipmentEntity = {
   },
 };
 
+const shipmentReadyToBeDeliveredMock: ShipmentEntity = {
+  id: '5aea509b-2741-442c-8e16-59c3faa5a69f',
+  start_route: new Date('2022-11-11'),
+  packages: [
+    {
+      id: '87db7682-a310-4f35-a0e3-e569541783c0',
+      status_id: EStatusPackage.DELIVERED,
+      latitude_destination: -26.894393,
+      longitude_destination: -48.674066,
+      isPossibleAssignLocation() {
+        return false;
+      },
+    },
+  ],
+  isAvailableToPackages() {
+    return false;
+  },
+};
+
 const shipmentFromDTOMock = (dto: ShipmentDTO): ShipmentEntity => {
   return {
     id: '87db7682-a310-4f35-a0e3-e569541783c0',
@@ -74,5 +93,6 @@ export {
   shipmentEmptyDTOMock,
   shipmentWithPackagesInWarehouseMock,
   shipmentWithPackagesInTransitMock,
+  shipmentReadyToBeDeliveredMock,
   shipmentFromDTOMock,
 };

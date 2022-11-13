@@ -14,6 +14,7 @@ const packageWarehouseMock: PackageEntity = {
 
 const packageTransitMock: PackageEntity = {
   id: '87db7682-a310-4f35-a0e3-e569541783c0',
+  shipment_id: '5aea509b-2741-442c-8e16-59c3faa5a69f',
   status_id: EStatusPackage.TRANSIT,
   latitude_destination: -26.894393,
   longitude_destination: -48.674066,

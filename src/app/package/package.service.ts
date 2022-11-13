@@ -88,7 +88,18 @@ export class PackageService {
       throw new BadRequestException('The Package is not in transit.');
 
     pakage.status_id = EStatusPackage.DELIVERED;
+    const result = await this.repository.update(pakage);
 
-    return await this.repository.update(pakage);
+    const shipment = await this.shipmentRepository.get(pakage.shipment_id);
+    const countInTransit = shipment.packages.filter((element) => {
+      return element.status_id === EStatusPackage.TRANSIT;
+    }).length;
+
+    if (countInTransit === 0) {
+      shipment.finished_route = new Date();
+      await this.shipmentRepository.update(shipment);
+    }
+
+    return result;
   }
 }
