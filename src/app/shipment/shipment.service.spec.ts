@@ -17,6 +17,25 @@ describe('PackageService', () => {
     service = new ShipmentService(repository);
   });
 
+  describe('listShipments', () => {
+    it('should return a list of shipments', async () => {
+      const shipment = shipmentMock;
+      const array = [shipment];
+
+      jest.spyOn(repository, 'find').mockResolvedValue(array);
+      expect(await service.list()).toBe(array);
+    });
+    it('should return a NotFoundException', async () => {
+      jest.spyOn(repository, 'find').mockResolvedValue([]);
+      try {
+        await service.list();
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No Shipment were found.');
+      }
+    });
+  });
+
   describe('createShipment', () => {
     it('should return create a Shipment', async () => {
       const dto = shipmentEmptyDTOMock;

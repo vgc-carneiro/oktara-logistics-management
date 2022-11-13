@@ -30,6 +30,27 @@ export class PackageController extends ExceptionControllerHandler {
   }
 
   @ApiOperation({
+    summary: 'List all packages in the system',
+    description: 'List all packages available on the system.',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Return a list of all the packages available on the system',
+  })
+  @ApiBadRequestResponse({
+    status: 404,
+    description: 'Not found any packages.',
+  })
+  @Get()
+  async list() {
+    try {
+      return await this.service.list();
+    } catch (error) {
+      this.handleResponseError(error);
+    }
+  }
+
+  @ApiOperation({
     summary: 'Create a Package',
     description: 'Create a Package',
   })

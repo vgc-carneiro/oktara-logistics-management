@@ -36,6 +36,25 @@ describe('PackageService', () => {
     );
   });
 
+  describe('listPackages', () => {
+    it('should return a list of packages', async () => {
+      const pakage = packageWarehouseMock;
+      const array = [pakage];
+
+      jest.spyOn(repository, 'find').mockResolvedValue(array);
+      expect(await service.list()).toBe(array);
+    });
+    it('should return a NotFoundException', async () => {
+      jest.spyOn(repository, 'find').mockResolvedValue([]);
+      try {
+        await service.list();
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No Packages were found.');
+      }
+    });
+  });
+
   describe('createPackage', () => {
     it('should return create a Package', async () => {
       const pakage = packageFromDTOMock(dto);

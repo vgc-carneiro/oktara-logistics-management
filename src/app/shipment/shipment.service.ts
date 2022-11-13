@@ -13,6 +13,13 @@ import { ShipmentRepository } from './shipment.repository';
 export class ShipmentService {
   constructor(private readonly repository: ShipmentRepository) {}
 
+  async list(): Promise<ShipmentEntity[]> {
+    const packages = await this.repository.find();
+    if (packages.length === 0)
+      throw new NotFoundException('No Shipment were found.');
+    return packages;
+  }
+
   async createShipment(dto: ShipmentDTO): Promise<ShipmentEntity> {
     const available = await this.repository.countAvailable();
 

@@ -12,6 +12,10 @@ export class ShipmentRepository {
     private repository: Repository<ShipmentEntity>,
   ) {}
 
+  async find(): Promise<ShipmentEntity[]> {
+    return await this.repository.find();
+  }
+
   async save(domain: Shipment): Promise<ShipmentEntity> {
     const model = this.repository.create();
     model.fromDomain(domain);

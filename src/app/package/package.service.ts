@@ -27,6 +27,13 @@ export class PackageService {
     }
   }
 
+  async list(): Promise<PackageEntity[]> {
+    const packages = await this.repository.find();
+    if (packages.length === 0)
+      throw new NotFoundException('No Packages were found.');
+    return packages;
+  }
+
   async get(id: string): Promise<PackageEntity> {
     const pakage = await this.repository.get(id);
     if (!pakage) throw new NotFoundException('No package were found.');

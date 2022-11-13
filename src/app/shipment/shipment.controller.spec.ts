@@ -1,4 +1,8 @@
-import { BadRequestException, HttpStatus } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpStatus,
+  NotFoundException,
+} from '@nestjs/common';
 import { ResponseMock } from '../../mocks/response.mock';
 import { shipmentEmptyDTOMock, shipmentMock } from '../../mocks/shipment.mock';
 import { ShipmentController } from './shipment.controller';
@@ -14,6 +18,27 @@ describe('ShipmentController', () => {
     service = new ShipmentService(null);
     controller = new ShipmentController(service);
     responseMocked = new ResponseMock();
+  });
+
+  describe('findShipments', () => {
+    it('should return a list of shipments', async () => {
+      const shipment = shipmentMock;
+      const array = [shipment];
+
+      jest.spyOn(service, 'list').mockResolvedValue(array);
+      expect(await controller.list()).toBe(array);
+    });
+    it('should return a NotFoundException', async () => {
+      jest.spyOn(service, 'list').mockImplementation(() => {
+        throw new NotFoundException('No Shipment were found.');
+      });
+      try {
+        await controller.list();
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No Shipment were found.');
+      }
+    });
   });
 
   describe('createShipment', () => {

@@ -30,6 +30,27 @@ export class ShipmentController extends ExceptionControllerHandler {
   }
 
   @ApiOperation({
+    summary: 'List all shipments in the system',
+    description: 'List all shipments available on the system.',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Return a list of all the shipments available on the system',
+  })
+  @ApiBadRequestResponse({
+    status: 404,
+    description: 'Not found any shipment.',
+  })
+  @Get()
+  async list() {
+    try {
+      return await this.service.list();
+    } catch (error) {
+      this.handleResponseError(error);
+    }
+  }
+
+  @ApiOperation({
     summary: 'Create a Shipment',
     description: 'Create a Shipment',
   })

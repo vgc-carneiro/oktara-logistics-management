@@ -28,6 +28,27 @@ describe('PackageController', () => {
     responseMocked = new ResponseMock();
   });
 
+  describe('findPackages', () => {
+    it('should return a list of packages', async () => {
+      const pakage = packageWarehouseMock;
+      const array = [pakage];
+
+      jest.spyOn(service, 'list').mockResolvedValue(array);
+      expect(await controller.list()).toBe(array);
+    });
+    it('should return a NotFoundException', async () => {
+      jest.spyOn(service, 'list').mockImplementation(() => {
+        throw new NotFoundException('No Package were found.');
+      });
+      try {
+        await controller.list();
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No Package were found.');
+      }
+    });
+  });
+
   describe('createPackage', () => {
     it('should return create a Package and return the header with location', async () => {
       const pakage = packageWarehouseMock;
