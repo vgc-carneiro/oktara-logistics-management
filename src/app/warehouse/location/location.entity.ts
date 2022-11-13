@@ -58,12 +58,16 @@ export class LocationEntity {
   })
   package?: PackageEntity;
 
-  fromDomain(location: Location) {
+  fromDomain?(location: Location) {
     if (location.id) this.id = location.id;
     if (location.package_id) this.package_id = location.package_id;
     this.warehouse_id = location.warehouse_id;
     this.floor = location.floor;
     this.hall = location.hall;
     this.shelf = location.shelf;
+  }
+
+  isAvailable?(): boolean {
+    return !this.package_id;
   }
 }

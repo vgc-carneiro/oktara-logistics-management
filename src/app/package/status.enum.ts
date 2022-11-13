@@ -1,5 +1,5 @@
 export enum EStatusPackage {
-  'WAREHOUSE' = 1,
-  'TRANSIT' = 2,
-  'DELIVERED' = 3,
+  'WAREHOUSE' = 0,
+  'TRANSIT' = 1,
+  'DELIVERED' = 2,
 }

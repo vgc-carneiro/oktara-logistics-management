@@ -19,4 +19,14 @@ export class LocationRepository {
     await this.repository.save(model);
     return null;
   }
+
+  async get(id: string): Promise<LocationEntity> {
+    return this.repository.findOne({
+      where: { id },
+    });
+  }
+
+  async update(entity: LocationEntity): Promise<LocationEntity> {
+    return await this.repository.save(entity);
+  }
 }
