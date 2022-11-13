@@ -1,4 +1,8 @@
-import { BadRequestException, HttpStatus } from '@nestjs/common';
+import {
+  BadRequestException,
+  HttpStatus,
+  NotFoundException,
+} from '@nestjs/common';
 import { packageDTOMock } from '../../mocks/package.dto.mock';
 import {
   packageWarehouseMock,
@@ -141,6 +145,21 @@ describe('PackageController', () => {
         expect(true).toBeFalsy();
       } catch (error) {
         expect(error.message).toBe('ShipmentID must be an UUID identifier.');
+      }
+    });
+
+    it('should throw a NotFoundException for a Shipment', async () => {
+      try {
+        jest.spyOn(service, 'addShipment').mockImplementation(() => {
+          throw new NotFoundException('No Shipment were found.');
+        });
+        await controller.addShipment(
+          '87db7682-a310-4f35-a0e3-e569541783c0',
+          '87db7682-a310-4f35-a0e3-e569541783c0',
+        );
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No Shipment were found.');
       }
     });
   });

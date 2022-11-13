@@ -71,4 +71,35 @@ describe('ShipmentController', () => {
       }
     });
   });
+
+  describe('startDelivering', () => {
+    it('should return a Shipment', async () => {
+      const shipment = shipmentMock;
+
+      jest.spyOn(service, 'startRoute').mockResolvedValue(shipment);
+      expect(await controller.startDelivering(shipment.id)).toBe(shipment);
+    });
+
+    it('should throw a NotFoundException', async () => {
+      const shipment = shipmentMock;
+      jest.spyOn(service, 'startRoute').mockImplementation(() => {
+        throw new Error('No shipment were found.');
+      });
+      try {
+        await controller.startDelivering(shipment.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No shipment were found.');
+      }
+    });
+
+    it('should throw a BadRequestException', async () => {
+      try {
+        await controller.startDelivering('123');
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('ID must be an UUID identifier.');
+      }
+    });
+  });
 });

@@ -25,6 +25,10 @@ export class ShipmentRepository {
     });
   }
 
+  async update(entity: ShipmentEntity): Promise<ShipmentEntity> {
+    return await this.repository.save(entity);
+  }
+
   async countAvailable(): Promise<number> {
     return this.repository.count({
       where: [

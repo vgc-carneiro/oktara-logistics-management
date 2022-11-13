@@ -78,4 +78,32 @@ export class ShipmentController extends ExceptionControllerHandler {
       this.handleResponseError(error);
     }
   }
+
+  @ApiOperation({
+    summary: 'Start Delivering.',
+    description:
+      'This endpoint will start the delivery. All packages will be updated with "IN TRANSIT" status and we will save the date of starting route.',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Return a Shipment Object with all its packages.',
+  })
+  @ApiNotFoundResponse({
+    status: 404,
+    description: 'Shipment not found.',
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'Request Malformed',
+  })
+  @Patch('/start-delivering/:id')
+  async startDelivering(@Param('id') id: string) {
+    try {
+      if (!isGuidValid(id))
+        throw new BadRequestException('ID must be an UUID identifier.');
+      return await this.service.startRoute(id);
+    } catch (error) {
+      this.handleResponseError(error);
+    }
+  }
 }

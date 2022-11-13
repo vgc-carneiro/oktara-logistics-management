@@ -2,6 +2,8 @@ import {
   shipmentEmptyDTOMock,
   shipmentFromDTOMock,
   shipmentMock,
+  shipmentWithPackagesInTransitMock,
+  shipmentWithPackagesInWarehouseMock,
 } from '../../mocks/shipment.mock';
 import { ShipmentRepository } from './shipment.repository';
 import { ShipmentService } from './shipment.service';
@@ -71,6 +73,51 @@ describe('PackageService', () => {
         expect(true).toBeFalsy();
       } catch (error) {
         expect(error.message).toBe('No shipment were found.');
+      }
+    });
+  });
+
+  describe('startRoute', () => {
+    it('should return a Shipment started', async () => {
+      const shipment = shipmentWithPackagesInWarehouseMock;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(shipment);
+      jest.spyOn(repository, 'update').mockResolvedValue(shipment);
+      expect(await service.startRoute(shipment.id)).toBe(shipment);
+    });
+
+    it('should throw a NotFoundException', async () => {
+      const shipment = shipmentMock;
+      jest.spyOn(repository, 'get').mockResolvedValue(null);
+      try {
+        await service.startRoute(shipment.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No shipment were found.');
+      }
+    });
+
+    it('should throw a BadRequestException, no packages inside the shipment.', async () => {
+      const shipment = shipmentMock;
+      jest.spyOn(repository, 'get').mockResolvedValue(shipment);
+      try {
+        await service.startRoute(shipment.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No packages inside this Shipment.');
+      }
+    });
+
+    it('should throw a BadRequestException, shipment already start deliverying.', async () => {
+      const shipment = shipmentWithPackagesInTransitMock;
+      jest.spyOn(repository, 'get').mockResolvedValue(shipment);
+      try {
+        await service.startRoute(shipment.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe(
+          'This shipment has already started its deliveries.',
+        );
       }
     });
   });

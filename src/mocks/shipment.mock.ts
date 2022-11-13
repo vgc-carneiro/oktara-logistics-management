@@ -1,3 +1,4 @@
+import { EStatusPackage } from '../app/package/status.enum';
 import { ShipmentDTO } from '../app/shipment/dto/shipment.dto';
 import { ShipmentEntity } from '../app/shipment/shipment.entity';
 
@@ -9,9 +10,40 @@ const shipmentEmptyDTOMock: ShipmentDTO = {
 
 const shipmentMock: ShipmentEntity = {
   id: '87db7682-a310-4f35-a0e3-e569541783c0',
-  packages: null,
+  packages: [],
   isAvailableToPackages() {
     return true;
+  },
+};
+
+const shipmentWithPackagesInWarehouseMock: ShipmentEntity = {
+  id: '87db7682-a310-4f35-a0e3-e569541783c0',
+  packages: [
+    {
+      id: '87db7682-a310-4f35-a0e3-e569541783c0',
+      status_id: EStatusPackage.WAREHOUSE,
+      latitude_destination: -26.894393,
+      longitude_destination: -48.674066,
+    },
+  ],
+  isAvailableToPackages() {
+    return true;
+  },
+};
+
+const shipmentWithPackagesInTransitMock: ShipmentEntity = {
+  id: '87db7682-a310-4f35-a0e3-e569541783c0',
+  start_route: new Date(),
+  packages: [
+    {
+      id: '87db7682-a310-4f35-a0e3-e569541783c0',
+      status_id: EStatusPackage.TRANSIT,
+      latitude_destination: -26.894393,
+      longitude_destination: -48.674066,
+    },
+  ],
+  isAvailableToPackages() {
+    return false;
   },
 };
 
@@ -40,5 +72,7 @@ export {
   shipmentMock,
   shipmentNotAvailableMock,
   shipmentEmptyDTOMock,
+  shipmentWithPackagesInWarehouseMock,
+  shipmentWithPackagesInTransitMock,
   shipmentFromDTOMock,
 };

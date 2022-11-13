@@ -134,10 +134,14 @@ export class PackageController extends ExceptionControllerHandler {
     @Param('id') id: string,
     @Param('shipmentID') shipmentID: string,
   ) {
-    if (!isGuidValid(id))
-      throw new BadRequestException('ID must be an UUID identifier.');
-    if (!isGuidValid(shipmentID))
-      throw new BadRequestException('ShipmentID must be an UUID identifier.');
-    return this.service.addShipment(id, shipmentID);
+    try {
+      if (!isGuidValid(id))
+        throw new BadRequestException('ID must be an UUID identifier.');
+      if (!isGuidValid(shipmentID))
+        throw new BadRequestException('ShipmentID must be an UUID identifier.');
+      return this.service.addShipment(id, shipmentID);
+    } catch (error) {
+      this.handleResponseError(error);
+    }
   }
 }
