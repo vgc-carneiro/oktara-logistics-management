@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, IsNull } from 'typeorm';
 import { Shipment } from './shipment';
 import { ShipmentEntity } from './shipment.entity';
 
@@ -21,6 +21,16 @@ export class ShipmentRepository {
     return this.repository.findOne({
       relations: ['packages'],
       where: { id },
+    });
+  }
+
+  async countAvailable(): Promise<number> {
+    return this.repository.count({
+      where: [
+        { start_route: IsNull() },
+        { estimated_route: IsNull() },
+        { finished_route: IsNull() },
+      ],
     });
   }
 }

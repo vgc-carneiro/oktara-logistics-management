@@ -17,6 +17,13 @@ export class ShipmentService {
   ) {}
 
   async createShipment(dto: ShipmentDTO): Promise<ShipmentEntity> {
+    const available = await this.repository.countAvailable();
+
+    if (available > 0)
+      throw new BadRequestException(
+        'There is an active shipment! Wait until it finishes.',
+      );
+
     const shipmentDomain = new Shipment(dto);
     try {
       return this.repository.save(shipmentDomain);
@@ -36,6 +43,11 @@ export class ShipmentService {
     if (!shipment) throw new NotFoundException('No Shipment were found.');
     const pakage = await this.packageRepository.get(packageID);
     if (!pakage) throw new NotFoundException('No Package were found.');
+
+    if (!pakage.isPossibleAssignLocation())
+      throw new BadRequestException(
+        'The Package it is not inside the warehouse anymore.',
+      );
 
     return null;
   }

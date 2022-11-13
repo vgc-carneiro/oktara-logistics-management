@@ -1,4 +1,7 @@
-import { packageWarehouseMock } from '../../mocks/package.mock';
+import {
+  packageTransitMock,
+  packageWarehouseMock,
+} from '../../mocks/package.mock';
 import {
   shipmentEmptyDTOMock,
   shipmentFromDTOMock,
@@ -24,6 +27,7 @@ describe('PackageService', () => {
       const dto = shipmentEmptyDTOMock;
       const model = shipmentFromDTOMock(dto);
 
+      jest.spyOn(repository, 'countAvailable').mockResolvedValue(0);
       jest.spyOn(repository, 'save').mockResolvedValue(model);
       const result = await service.createShipment(dto);
 
@@ -33,6 +37,7 @@ describe('PackageService', () => {
     it('should throw a BadRequestException', async () => {
       try {
         const dto = shipmentEmptyDTOMock;
+        jest.spyOn(repository, 'countAvailable').mockResolvedValue(0);
         jest.spyOn(repository, 'save').mockImplementation(() => {
           throw new Error('Error to insert a Shipment.');
         });
@@ -40,6 +45,19 @@ describe('PackageService', () => {
         expect(true).toBeFalsy();
       } catch (error) {
         expect(error.message).toBe('Error to insert a Shipment.');
+      }
+    });
+
+    it('should throw a BadRequestException because there is an Active Shipment', async () => {
+      try {
+        const dto = shipmentEmptyDTOMock;
+        jest.spyOn(repository, 'countAvailable').mockResolvedValue(1);
+        await service.createShipment(dto);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe(
+          'There is an active shipment! Wait until it finishes.',
+        );
       }
     });
   });
@@ -88,6 +106,22 @@ describe('PackageService', () => {
         expect(true).toBeFalsy();
       } catch (error) {
         expect(error.message).toBe('No Package were found.');
+      }
+    });
+
+    it('should throw a BadRequestException for isPossibleAssignLocation', async () => {
+      const pakage = packageTransitMock;
+      const shipment = shipmentMock;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(shipment);
+      jest.spyOn(packageRepository, 'get').mockResolvedValue(pakage);
+      try {
+        await service.addPackage(shipment.id, pakage.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe(
+          'The Package it is not inside the warehouse anymore.',
+        );
       }
     });
   });
