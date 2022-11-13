@@ -1,3 +1,4 @@
+import { ShipmentModule } from './app/shipment/shipment.module';
 import { PackageModule } from './app/package/package.module';
 import { WarehouseModule } from './app/warehouse/warehouse.module';
 import { Module } from '@nestjs/common';
@@ -9,6 +10,7 @@ import { AppService } from './app.service';
 
 @Module({
   imports: [
+    ShipmentModule,
     PackageModule,
     TerminusModule,
     TypeOrmModule.forRootAsync({ useClass: DatabaseConfiguration }),

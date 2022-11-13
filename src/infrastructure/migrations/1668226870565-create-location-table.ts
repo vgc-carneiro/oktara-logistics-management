@@ -1,6 +1,6 @@
 import { MigrationInterface, QueryRunner } from 'typeorm';
 
-export class createLocationTable1668226900565 implements MigrationInterface {
+export class createLocationTable1668226870565 implements MigrationInterface {
   public async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.query(`
       create table location
@@ -11,9 +11,6 @@ export class createLocationTable1668226900565 implements MigrationInterface {
           warehouse_id uuid                                 not null
               constraint location_warehouse_fk
                   references warehouse,
-          package_id   uuid                                 
-              constraint location_package_fk
-                  references package,
           floor        varchar(50),
           hall         varchar(50),
           shelf        varchar(15)                          not null,

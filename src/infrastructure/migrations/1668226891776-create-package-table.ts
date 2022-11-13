@@ -11,6 +11,9 @@ export class createPackageTable1668226891776 implements MigrationInterface {
           shipment_id           uuid
               constraint "PACKAGE_shipment_fk"
                   references shipment (id),
+          location_id           uuid
+              constraint "PACKAGE_location_fk"
+                  references location (id),
           status_id             integer default 0                    not null,
           latitude_destination  numeric                              not null,
           longitude_destination numeric                              not null,

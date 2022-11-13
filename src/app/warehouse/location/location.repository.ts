@@ -23,6 +23,7 @@ export class LocationRepository {
   async get(id: string): Promise<LocationEntity> {
     return this.repository.findOne({
       where: { id },
+      relations: ['package'],
     });
   }
 

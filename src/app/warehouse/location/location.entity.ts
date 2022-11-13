@@ -21,9 +21,6 @@ export class LocationEntity {
   @Column('uuid')
   warehouse_id: string;
 
-  @Column('uuid')
-  package_id?: string;
-
   @Column({ length: 50 })
   floor?: string;
 
@@ -53,14 +50,13 @@ export class LocationEntity {
   @OneToOne(() => PackageEntity, (pakage: PackageEntity) => pakage.location)
   @JoinTable({ name: 'package' })
   @JoinColumn({
-    name: 'package_id',
-    referencedColumnName: 'id',
+    name: 'id',
+    referencedColumnName: 'location_id',
   })
   package?: PackageEntity;
 
   fromDomain?(location: Location) {
     if (location.id) this.id = location.id;
-    if (location.package_id) this.package_id = location.package_id;
     this.warehouse_id = location.warehouse_id;
     this.floor = location.floor;
     this.hall = location.hall;
@@ -68,6 +64,6 @@ export class LocationEntity {
   }
 
   isAvailable?(): boolean {
-    return !this.package_id;
+    return this.package === null;
   }
 }

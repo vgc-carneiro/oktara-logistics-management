@@ -9,19 +9,20 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 import { PackageEntity } from '../package/package.entity';
+import { Shipment } from './shipment';
 
 @Entity({ schema: 'public', name: 'shipment' })
 export class ShipmentEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column('date')
+  @Column('timestamp')
   start_route?: Date;
 
-  @Column('date')
+  @Column('timestamp')
   estimated_route?: Date;
 
-  @Column('date')
+  @Column('timestamp')
   finished_route?: Date;
 
   @CreateDateColumn()
@@ -31,7 +32,7 @@ export class ShipmentEntity {
   updated_at?: Date;
 
   @OneToMany(() => PackageEntity, (pakage: PackageEntity) => pakage.shipment, {
-    eager: true,
+    cascade: true,
   })
   @JoinTable({ name: 'package' })
   @JoinColumn({
@@ -39,4 +40,15 @@ export class ShipmentEntity {
     referencedColumnName: 'shipment_id',
   })
   packages: PackageEntity[];
+
+  fromDomain?(domain: Shipment) {
+    if (domain.id) this.id = domain.id;
+    if (domain.start_route) this.start_route = domain.start_route;
+    if (domain.estimated_route) this.estimated_route = domain.estimated_route;
+    if (domain.finished_route) this.finished_route = domain.finished_route;
+  }
+
+  isAvailableToPackages(): boolean {
+    return this.start_route === null;
+  }
 }

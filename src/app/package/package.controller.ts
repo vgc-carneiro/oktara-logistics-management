@@ -30,6 +30,27 @@ export class PackageController extends ExceptionControllerHandler {
   }
 
   @ApiOperation({
+    summary: 'List all packages in the system',
+    description: 'List all packages available on the system.',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description: 'Return a list of all the packages available on the system',
+  })
+  @ApiBadRequestResponse({
+    status: 404,
+    description: 'Not found any packages.',
+  })
+  @Get()
+  async list() {
+    try {
+      return await this.service.list();
+    } catch (error) {
+      this.handleResponseError(error);
+    }
+  }
+
+  @ApiOperation({
     summary: 'Create a Package',
     description: 'Create a Package',
   })
@@ -86,7 +107,7 @@ export class PackageController extends ExceptionControllerHandler {
   @ApiOkResponse({
     status: 200,
     description:
-      'Assign a Location and returne a Package Object with a Location',
+      'Assign a Location and return a Package Object with a Location',
   })
   @ApiNotFoundResponse({
     status: 404,
@@ -107,6 +128,67 @@ export class PackageController extends ExceptionControllerHandler {
       if (!isGuidValid(locationID))
         throw new BadRequestException('LocationID must be an UUID identifier.');
       return this.service.assignLocation(id, locationID);
+    } catch (error) {
+      this.handleResponseError(error);
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Put a Package on the Shipment',
+    description: 'Put a Package on the Shipment',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description:
+      'Put a Package on the Shipment and return a Package Object with a Shipment',
+  })
+  @ApiNotFoundResponse({
+    status: 404,
+    description: 'Package not found or Shipment not found.',
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'Request Malformed',
+  })
+  @Patch(':id/shipment/:shipmentID')
+  async addShipment(
+    @Param('id') id: string,
+    @Param('shipmentID') shipmentID: string,
+  ) {
+    try {
+      if (!isGuidValid(id))
+        throw new BadRequestException('ID must be an UUID identifier.');
+      if (!isGuidValid(shipmentID))
+        throw new BadRequestException('ShipmentID must be an UUID identifier.');
+      return this.service.addShipment(id, shipmentID);
+    } catch (error) {
+      this.handleResponseError(error);
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Mark a package as "Delivered"',
+    description: 'Finishing the delivery of a Package',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description:
+      'Mark a package as delivered. Return a Package Object with Shipment inside.',
+  })
+  @ApiNotFoundResponse({
+    status: 404,
+    description: 'Package not found.',
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'Request Malformed',
+  })
+  @Patch('deliver/:id')
+  async deliver(@Param('id') id: string) {
+    try {
+      if (!isGuidValid(id))
+        throw new BadRequestException('ID must be an UUID identifier.');
+      return this.service.deliver(id);
     } catch (error) {
       this.handleResponseError(error);
     }
