@@ -5,7 +5,13 @@ import {
   packageTransitMock,
   packageWarehouseMock,
   packagewithLocationMock,
+  packageWithShipmentMock,
 } from '../../mocks/package.mock';
+import {
+  shipmentMock,
+  shipmentNotAvailableMock,
+} from '../../mocks/shipment.mock';
+import { ShipmentRepository } from '../shipment/shipment.repository';
 import { LocationRepository } from '../warehouse/location/location.repository';
 import { PackageRepository } from './package.repository';
 import { PackageService } from './package.service';
@@ -14,12 +20,18 @@ describe('PackageService', () => {
   let service: PackageService;
   let repository: PackageRepository;
   let locationRepository: LocationRepository;
+  let shipmentRepository: ShipmentRepository;
   const dto = packageDTOMock;
 
   beforeEach(() => {
     repository = new PackageRepository(null);
     locationRepository = new LocationRepository(null);
-    service = new PackageService(repository, locationRepository);
+    shipmentRepository = new ShipmentRepository(null);
+    service = new PackageService(
+      repository,
+      locationRepository,
+      shipmentRepository,
+    );
   });
 
   describe('createPackage', () => {
@@ -136,6 +148,75 @@ describe('PackageService', () => {
       expect(
         await service.assignLocation(pakageLocation.id, locationAvailable.id),
       ).toBe(pakageLocation);
+    });
+  });
+
+  describe('addShipmentToAPackage', () => {
+    it('should throw a NotFoundException for Shipment', async () => {
+      const pakage = packageWarehouseMock;
+      const shipment = shipmentMock;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(packageWarehouseMock);
+      jest.spyOn(shipmentRepository, 'get').mockResolvedValue(null);
+      try {
+        await service.addShipment(pakage.id, shipment.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No Shipment were found.');
+      }
+    });
+
+    it('should throw a NotFoundException for Package', async () => {
+      const pakage = packageWarehouseMock;
+      const shipment = shipmentMock;
+      jest.spyOn(repository, 'get').mockResolvedValue(null);
+      try {
+        await service.addShipment(pakage.id, shipment.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No Package were found.');
+      }
+    });
+
+    it('should throw a BadRequestException for isPossibleAssignLocation', async () => {
+      const pakage = packageTransitMock;
+      const shipment = shipmentMock;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(pakage);
+      try {
+        await service.addShipment(pakage.id, shipment.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe(
+          'The Package it is not inside the warehouse anymore.',
+        );
+      }
+    });
+
+    it('should throw a BadRequestException for Shipment Not Available', async () => {
+      const pakage = packageWarehouseMock;
+      const shipment = shipmentNotAvailableMock;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(pakage);
+      jest.spyOn(shipmentRepository, 'get').mockResolvedValue(shipment);
+      try {
+        await service.addShipment(pakage.id, shipment.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe(
+          'Sorry. This shipment is not available for packages right now.',
+        );
+      }
+    });
+
+    it('should return a Package with Shipment inside.', async () => {
+      const pakage = packageWithShipmentMock;
+      const shipment = packageWithShipmentMock.shipment;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(pakage);
+      jest.spyOn(shipmentRepository, 'get').mockResolvedValue(shipment);
+      jest.spyOn(repository, 'update').mockResolvedValue(pakage);
+      expect(await service.addShipment(pakage.id, shipment.id)).toBe(pakage);
     });
   });
 });

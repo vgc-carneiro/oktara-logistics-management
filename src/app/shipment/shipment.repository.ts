@@ -17,9 +17,10 @@ export class ShipmentRepository {
     return await this.repository.save(model);
   }
 
-  async get(id: string): Promise<ShipmentEntity> {
+  async get(id: string, needRelation: boolean = true): Promise<ShipmentEntity> {
+    const relations = needRelation ? ['packages'] : [];
     return this.repository.findOne({
-      relations: ['packages'],
+      relations: relations,
       where: { id },
     });
   }

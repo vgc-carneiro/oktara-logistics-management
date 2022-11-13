@@ -38,6 +38,25 @@ const packagewithLocationMock: PackageEntity = {
   },
 };
 
+const packageWithShipmentMock: PackageEntity = {
+  id: '87db7682-a310-4f35-a0e3-e569541783c0',
+  status_id: EStatusPackage.WAREHOUSE,
+  location_id: null,
+  latitude_destination: -26.894393,
+  longitude_destination: -48.674066,
+  shipment_id: '5aea509b-2741-442c-8e16-59c3faa5a69f',
+  shipment: {
+    id: '5aea509b-2741-442c-8e16-59c3faa5a69f',
+    packages: null,
+    isAvailableToPackages() {
+      return true;
+    },
+  },
+  isPossibleAssignLocation() {
+    return this.status_id === EStatusPackage.WAREHOUSE;
+  },
+};
+
 const packageFromDTOMock = (dto: PackageDTO): PackageEntity => {
   return {
     id: '87db7682-a310-4f35-a0e3-e569541783c0',
@@ -51,5 +70,6 @@ export {
   packageWarehouseMock,
   packagewithLocationMock,
   packageTransitMock,
+  packageWithShipmentMock,
   packageFromDTOMock,
 };

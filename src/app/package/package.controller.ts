@@ -111,4 +111,33 @@ export class PackageController extends ExceptionControllerHandler {
       this.handleResponseError(error);
     }
   }
+
+  @ApiOperation({
+    summary: 'Put a Package on the Shipment',
+    description: 'Put a Package on the Shipment',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description:
+      'Put a Package on the Shipment and return a Package Object with a Shipment',
+  })
+  @ApiNotFoundResponse({
+    status: 404,
+    description: 'Package not found or Shipment not found.',
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'Request Malformed',
+  })
+  @Patch(':id/shipment/:shipmentID')
+  async addShipment(
+    @Param('id') id: string,
+    @Param('shipmentID') shipmentID: string,
+  ) {
+    if (!isGuidValid(id))
+      throw new BadRequestException('ID must be an UUID identifier.');
+    if (!isGuidValid(shipmentID))
+      throw new BadRequestException('ShipmentID must be an UUID identifier.');
+    return this.service.addShipment(id, shipmentID);
+  }
 }

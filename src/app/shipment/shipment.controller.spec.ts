@@ -11,7 +11,7 @@ describe('ShipmentController', () => {
   let responseMocked: ResponseMock;
 
   beforeEach(() => {
-    service = new ShipmentService(null, null, null);
+    service = new ShipmentService(null);
     controller = new ShipmentController(service);
     responseMocked = new ResponseMock();
   });
@@ -68,41 +68,6 @@ describe('ShipmentController', () => {
         expect(true).toBeFalsy();
       } catch (error) {
         expect(error.message).toBe('ID must be an UUID identifier.');
-      }
-    });
-  });
-
-  describe('addPackageToAShipment', () => {
-    it('should return a Shipment with Packages', async () => {
-      const shipment = shipmentMock;
-      jest.spyOn(service, 'addPackage').mockResolvedValue(shipment);
-
-      expect(
-        await controller.addPackage(
-          '87db7682-a310-4f35-a0e3-e569541783c0',
-          '5aea509b-2741-442c-8e16-59c3faa5a69f',
-        ),
-      ).toBe(shipment);
-    });
-
-    it('should throw a BadRequestException for an ID', async () => {
-      try {
-        await controller.addPackage('123', '123');
-        expect(true).toBeFalsy();
-      } catch (error) {
-        expect(error.message).toBe('ID must be an UUID identifier.');
-      }
-    });
-
-    it('should throw a BadRequestException for a PackageID', async () => {
-      try {
-        await controller.addPackage(
-          '87db7682-a310-4f35-a0e3-e569541783c0',
-          '123',
-        );
-        expect(true).toBeFalsy();
-      } catch (error) {
-        expect(error.message).toBe('PackageID must be an UUID identifier.');
       }
     });
   });

@@ -31,9 +31,7 @@ export class ShipmentEntity {
   @UpdateDateColumn()
   updated_at?: Date;
 
-  @OneToMany(() => PackageEntity, (pakage: PackageEntity) => pakage.shipment, {
-    eager: true,
-  })
+  @OneToMany(() => PackageEntity, (pakage: PackageEntity) => pakage.shipment)
   @JoinTable({ name: 'package' })
   @JoinColumn({
     name: 'id',
