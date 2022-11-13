@@ -33,7 +33,7 @@ $ make install
 $ make tests
 
 # Without Make
-$ docker volume create api-log-manager-nodemodules
+$ docker volume create api-logistics-manager-nodemodules
 $ docker-compose -f docker-compose.builder.yml run --rm install
 $ docker-compose -f docker-compose.test.yml up
 ```
@@ -47,7 +47,7 @@ $ make install
 $ make cover
 
 # Without Make
-$ docker volume create api-log-manager-nodemodules
+$ docker volume create api-logistics-manager-nodemodules
 $ docker-compose -f docker-compose.builder.yml run --rm install
 $ docker-compose -f docker-compose.test.cov.yml up
 ```
@@ -61,7 +61,7 @@ $ make install
 $ make dev
 
 # Without Make
-$ docker volume create api-log-manager-nodemodules
+$ docker volume create api-logistics-manager-nodemodules
 $ docker-compose -f docker-compose.builder.yml run --rm install
 $ docker-compose -f docker-compose.dev.yml up
 ```
