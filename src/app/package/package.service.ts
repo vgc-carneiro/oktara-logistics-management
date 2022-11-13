@@ -78,4 +78,8 @@ export class PackageService {
 
     return updated;
   }
+
+  async deliver(id: string): Promise<PackageEntity> {
+    return null;
+  }
 }

@@ -5,6 +5,7 @@ import {
 } from '@nestjs/common';
 import { packageDTOMock } from '../../mocks/package.dto.mock';
 import {
+  packageDeliveredMock,
   packageWarehouseMock,
   packagewithLocationMock,
   packageWithShipmentMock,
@@ -160,6 +161,36 @@ describe('PackageController', () => {
         expect(true).toBeFalsy();
       } catch (error) {
         expect(error.message).toBe('No Shipment were found.');
+      }
+    });
+  });
+
+  describe('deliverAPackage', () => {
+    it('should return a Package with Shipment', async () => {
+      const pakage = packageDeliveredMock;
+      jest.spyOn(service, 'deliver').mockResolvedValue(pakage);
+
+      expect(await controller.deliver(pakage.id)).toBe(pakage);
+    });
+
+    it('should throw a BadRequestException for an ID', async () => {
+      try {
+        await controller.deliver('123');
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('ID must be an UUID identifier.');
+      }
+    });
+
+    it('should throw a NotFoundException for a Package', async () => {
+      try {
+        jest.spyOn(service, 'deliver').mockImplementation(() => {
+          throw new NotFoundException('No Package were found.');
+        });
+        await controller.deliver('87db7682-a310-4f35-a0e3-e569541783c0');
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No Package were found.');
       }
     });
   });
