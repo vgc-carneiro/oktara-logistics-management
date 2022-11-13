@@ -22,6 +22,9 @@ export class PackageEntity {
   @Column('uuid')
   shipment_id?: string;
 
+  @Column('uuid')
+  location_id?: string;
+
   @Column('integer')
   status_id: number;
 
@@ -51,18 +54,18 @@ export class PackageEntity {
   @OneToOne(
     () => LocationEntity,
     (location: LocationEntity) => location.package,
-    { cascade: true },
   )
   @JoinTable({ name: 'location' })
   @JoinColumn({
-    name: 'id',
-    referencedColumnName: 'package_id',
+    name: 'location_id',
+    referencedColumnName: 'id',
   })
   location?: LocationEntity;
 
   fromDomain?(domain: Package) {
     if (domain.id) this.id = domain.id;
     if (domain.shipment_id) this.shipment_id = domain.shipment_id;
+    if (domain.location_id) this.location_id = domain.location_id;
     this.status_id = domain.status_id;
     this.latitude_destination = domain.latitude;
     this.longitude_destination = domain.longitude;

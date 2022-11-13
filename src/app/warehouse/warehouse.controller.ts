@@ -18,11 +18,11 @@ export class WarehouseController extends ExceptionControllerHandler {
 
   @ApiOperation({
     summary: 'List all warehouses',
-    description: 'List all warehouses avaiable on the system.',
+    description: 'List all warehouses available on the system.',
   })
   @ApiOkResponse({
     status: 200,
-    description: 'Return a list of all the warehouses avaiable on the system',
+    description: 'Return a list of all the warehouses available on the system',
   })
   @ApiBadRequestResponse({
     status: 404,

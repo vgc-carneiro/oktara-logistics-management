@@ -11,6 +11,10 @@ export class PackageRepository {
     private repository: Repository<PackageEntity>,
   ) {}
 
+  async find(): Promise<PackageEntity[]> {
+    return await this.repository.find();
+  }
+
   async save(domain: Package): Promise<PackageEntity> {
     const model = this.repository.create();
     model.fromDomain(domain);
@@ -22,5 +26,9 @@ export class PackageRepository {
       relations: ['location'],
       where: { id },
     });
+  }
+
+  async update(entity: PackageEntity): Promise<PackageEntity> {
+    return await this.repository.save(entity);
   }
 }

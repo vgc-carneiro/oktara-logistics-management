@@ -20,11 +20,6 @@ export class WarehouseSeeder {
         latitude: -23.315089,
         longitude: -51.175864,
       },
-      {
-        name: 'Sea warehouse Itajai LTD.',
-        latitude: -26.894393,
-        longitude: -48.674066,
-      },
     ];
 
     data_seeder.forEach(async (warehouse) => {
@@ -43,6 +38,34 @@ export class WarehouseSeeder {
           {
             warehouse_id: warehouseEntity.id,
             shelf: 'Third Shelf',
+          },
+          {
+            warehouse_id: warehouseEntity.id,
+            shelf: 'Fourth Shelf',
+          },
+          {
+            warehouse_id: warehouseEntity.id,
+            shelf: 'Fifth Shelf',
+          },
+          {
+            warehouse_id: warehouseEntity.id,
+            shelf: 'Sixth Shelf',
+          },
+          {
+            warehouse_id: warehouseEntity.id,
+            shelf: 'Seventh Shelf',
+          },
+          {
+            warehouse_id: warehouseEntity.id,
+            shelf: 'Eighth Shelf',
+          },
+          {
+            warehouse_id: warehouseEntity.id,
+            shelf: 'Nineth Shelf',
+          },
+          {
+            warehouse_id: warehouseEntity.id,
+            shelf: 'Tenth Shelf',
           },
         ];
 
