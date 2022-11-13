@@ -41,18 +41,12 @@ export class PackageService {
 
     const location = await this.locationRepository.get(locationID);
     if (!location) throw new NotFoundException('No location were found.');
-
     if (!location.isAvailable())
       throw new BadRequestException('The Location is not available.');
 
-    if (pakage.location) {
-      pakage.location.package_id = null;
-      await this.locationRepository.update(pakage.location);
-    }
+    pakage.location = location;
 
-    location.package_id = pakage.id;
-
-    await this.locationRepository.update(location);
+    await this.repository.update(pakage);
 
     return await this.repository.get(pakage.id);
   }

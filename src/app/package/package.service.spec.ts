@@ -131,12 +131,7 @@ describe('PackageService', () => {
       jest
         .spyOn(locationRepository, 'get')
         .mockResolvedValue(locationAvailable);
-      jest
-        .spyOn(locationRepository, 'update')
-        .mockResolvedValue(locationAvailable);
-      jest
-        .spyOn(locationRepository, 'update')
-        .mockResolvedValue(locationAvailable);
+      jest.spyOn(repository, 'update').mockResolvedValue(pakageLocation);
       jest.spyOn(repository, 'get').mockResolvedValue(pakageLocation);
       expect(
         await service.assignLocation(pakageLocation.id, locationAvailable.id),

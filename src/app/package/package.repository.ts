@@ -23,4 +23,8 @@ export class PackageRepository {
       where: { id },
     });
   }
+
+  async update(entity: PackageEntity): Promise<PackageEntity> {
+    return await this.repository.save(entity);
+  }
 }

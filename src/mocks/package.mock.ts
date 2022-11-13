@@ -25,13 +25,13 @@ const packageTransitMock: PackageEntity = {
 const packagewithLocationMock: PackageEntity = {
   id: '87db7682-a310-4f35-a0e3-e569541783c0',
   status_id: EStatusPackage.WAREHOUSE,
+  location_id: '5aea509b-2741-442c-8e16-59c3faa5a69f',
   latitude_destination: -26.894393,
   longitude_destination: -48.674066,
   location: {
     id: '5aea509b-2741-442c-8e16-59c3faa5a69f',
     shelf: 'Third shelf on right',
     warehouse_id: 'ac621e58-870c-49a3-acfa-b53f3f41faf0',
-    package_id: '87db7682-a310-4f35-a0e3-e569541783c0',
   },
   isPossibleAssignLocation() {
     return this.status_id === EStatusPackage.WAREHOUSE;
