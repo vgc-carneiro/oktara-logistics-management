@@ -1,3 +1,4 @@
+import { PackageDTO } from './dto/package.dto';
 import { EStatusPackage } from './status.enum';
 
 export class Package {
@@ -6,4 +7,8 @@ export class Package {
   status_id: EStatusPackage;
   latitude: number;
   longitude: number;
+  constructor(dto: PackageDTO) {
+    this.latitude = dto.latitudeDestination;
+    this.longitude = dto.longitudeDestination;
+  }
 }
