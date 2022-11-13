@@ -25,4 +25,8 @@ export class PackageService {
     if (!pakage) throw new NotFoundException('No package were found.');
     return pakage;
   }
+
+  async assignLocation(id: string, locationID: string): Promise<PackageEntity> {
+    return null;
+  }
 }

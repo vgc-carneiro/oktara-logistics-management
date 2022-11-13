@@ -5,6 +5,7 @@ import {
   Get,
   HttpStatus,
   Param,
+  Patch,
   Post,
   Res,
 } from '@nestjs/common';
@@ -73,6 +74,39 @@ export class PackageController extends ExceptionControllerHandler {
       if (!isGuidValid(id))
         throw new BadRequestException('ID must be an UUID identifier.');
       return this.service.get(id);
+    } catch (error) {
+      this.handleResponseError(error);
+    }
+  }
+
+  @ApiOperation({
+    summary: 'Assign a Location to a Package',
+    description: 'Assign a Location to a Package',
+  })
+  @ApiOkResponse({
+    status: 200,
+    description:
+      'Assign a Location and returne a Package Object with a Location',
+  })
+  @ApiNotFoundResponse({
+    status: 404,
+    description: 'Package not found or Location not found.',
+  })
+  @ApiBadRequestResponse({
+    status: 400,
+    description: 'Request Malformed',
+  })
+  @Patch(':id/location/:locationID')
+  async assignLocation(
+    @Param('id') id: string,
+    @Param('locationID') locationID: string,
+  ) {
+    try {
+      if (!isGuidValid(id))
+        throw new BadRequestException('ID must be an UUID identifier.');
+      if (!isGuidValid(locationID))
+        throw new BadRequestException('LocationID must be an UUID identifier.');
+      return this.service.assignLocation(id, locationID);
     } catch (error) {
       this.handleResponseError(error);
     }
