@@ -1,5 +1,5 @@
 import { NotFoundException } from '@nestjs/common';
-import { warehouseMocked } from '../../../test/mocks/warehouse.mock';
+import { warehouseMock } from '../../mocks/warehouse.mock';
 import { WarehouseController } from './warehouse.controller';
 import { WarehouseService } from './warehouse.service';
 
@@ -7,7 +7,7 @@ describe('WarehouseController', () => {
   let warehouseService: WarehouseService;
   let warehouseController: WarehouseController;
 
-  const warehouse = warehouseMocked;
+  const warehouse = warehouseMock;
 
   beforeEach(() => {
     warehouseService = new WarehouseService(null);
