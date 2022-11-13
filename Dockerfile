@@ -1,4 +1,4 @@
-FROM node:18.12-alpine3.15 AS builder
+FROM node:18.12-alpine3.15
 
 WORKDIR /usr/src/app
 
@@ -12,19 +12,20 @@ RUN npm install -g @nestjs/cli
 
 RUN npm run build
 
-FROM node:18.12-alpine3.15
+# FROM node:18.12-alpine3.15
 
-RUN apk add --no-cache curl
+# RUN apk add --no-cache curl
+# RUN npm install -g @nestjs/cli
 
-ENV NODE_ENV=production
+# ENV NODE_ENV=production
 
-WORKDIR /usr/src/app
+# WORKDIR /usr/src/app
 
-COPY package.json ./
+# COPY package.json ./
 
-RUN npm install --production
+# RUN npm install
 
-COPY --from=builder /usr/src/app/dist ./dist
+# COPY --from=builder /usr/src/app/dist ./dist
 
 EXPOSE 3335
 
