@@ -15,6 +15,7 @@ import { ShipmentRepository } from '../shipment/shipment.repository';
 import { LocationRepository } from '../warehouse/location/location.repository';
 import { PackageRepository } from './package.repository';
 import { PackageService } from './package.service';
+import { EStatusPackage } from './status.enum';
 
 describe('PackageService', () => {
   let service: PackageService;
@@ -217,6 +218,43 @@ describe('PackageService', () => {
       jest.spyOn(shipmentRepository, 'get').mockResolvedValue(shipment);
       jest.spyOn(repository, 'update').mockResolvedValue(pakage);
       expect(await service.addShipment(pakage.id, shipment.id)).toBe(pakage);
+    });
+  });
+
+  describe('deliverPackage', () => {
+    it('should throw a NotFoundException for Package', async () => {
+      const pakage = packageTransitMock;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(null);
+      try {
+        await service.deliver(pakage.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No Package were found.');
+      }
+    });
+
+    it('should throw a BadRequestException for Package it is not in transit', async () => {
+      const pakage = packageWarehouseMock;
+      jest.spyOn(repository, 'get').mockResolvedValue(pakage);
+      try {
+        await service.deliver(pakage.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('The Package is not in transit.');
+      }
+    });
+
+    it('should return a Package delivered.', async () => {
+      const pakage = packageTransitMock;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(pakage);
+      jest.spyOn(repository, 'update').mockImplementationOnce(async () => {
+        pakage.status_id = EStatusPackage.DELIVERED;
+        return pakage;
+      });
+      const result = await service.deliver(pakage.id);
+      expect(result.status_id).toBe(EStatusPackage.DELIVERED);
     });
   });
 });
