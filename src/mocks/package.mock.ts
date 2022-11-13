@@ -1,13 +1,25 @@
 import { EStatusPackage } from '../../src/app/package/status.enum';
 import { PackageEntity } from '../../src/app/package/package.entity';
 import { PackageDTO } from '../app/package/dto/package.dto';
-import { LocationEntity } from '../app/warehouse/location/location.entity';
 
 const packageWarehouseMock: PackageEntity = {
   id: '87db7682-a310-4f35-a0e3-e569541783c0',
   status_id: EStatusPackage.WAREHOUSE,
   latitude_destination: -26.894393,
   longitude_destination: -48.674066,
+  isPossibleAssignLocation() {
+    return this.status_id === EStatusPackage.WAREHOUSE;
+  },
+};
+
+const packageTransitMock: PackageEntity = {
+  id: '87db7682-a310-4f35-a0e3-e569541783c0',
+  status_id: EStatusPackage.TRANSIT,
+  latitude_destination: -26.894393,
+  longitude_destination: -48.674066,
+  isPossibleAssignLocation() {
+    return this.status_id === EStatusPackage.WAREHOUSE;
+  },
 };
 
 const packagewithLocationMock: PackageEntity = {
@@ -21,6 +33,9 @@ const packagewithLocationMock: PackageEntity = {
     warehouse_id: 'ac621e58-870c-49a3-acfa-b53f3f41faf0',
     package_id: '87db7682-a310-4f35-a0e3-e569541783c0',
   },
+  isPossibleAssignLocation() {
+    return this.status_id === EStatusPackage.WAREHOUSE;
+  },
 };
 
 const packageFromDTOMock = (dto: PackageDTO): PackageEntity => {
@@ -32,4 +47,9 @@ const packageFromDTOMock = (dto: PackageDTO): PackageEntity => {
   };
 };
 
-export { packageWarehouseMock, packagewithLocationMock, packageFromDTOMock };
+export {
+  packageWarehouseMock,
+  packagewithLocationMock,
+  packageTransitMock,
+  packageFromDTOMock,
+};

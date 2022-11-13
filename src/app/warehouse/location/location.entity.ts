@@ -66,4 +66,8 @@ export class LocationEntity {
     this.hall = location.hall;
     this.shelf = location.shelf;
   }
+
+  isAvailable?(): boolean {
+    return !this.package_id;
+  }
 }

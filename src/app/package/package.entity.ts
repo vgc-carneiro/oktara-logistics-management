@@ -12,6 +12,7 @@ import {
 import { ShipmentEntity } from '../shipment/shipment.entity';
 import { LocationEntity } from '../warehouse/location/location.entity';
 import { Package } from './package';
+import { EStatusPackage } from './status.enum';
 
 @Entity({ schema: 'public', name: 'package' })
 export class PackageEntity {
@@ -50,6 +51,7 @@ export class PackageEntity {
   @OneToOne(
     () => LocationEntity,
     (location: LocationEntity) => location.package,
+    { cascade: true },
   )
   @JoinTable({ name: 'location' })
   @JoinColumn({
@@ -64,5 +66,9 @@ export class PackageEntity {
     this.status_id = domain.status_id;
     this.latitude_destination = domain.latitude;
     this.longitude_destination = domain.longitude;
+  }
+
+  isPossibleAssignLocation?() {
+    return this.status_id === EStatusPackage.WAREHOUSE;
   }
 }
