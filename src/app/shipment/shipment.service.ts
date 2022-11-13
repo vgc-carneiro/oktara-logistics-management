@@ -4,6 +4,7 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { PackageRepository } from '../package/package.repository';
+import { LocationRepository } from '../warehouse/location/location.repository';
 import { ShipmentDTO } from './dto/shipment.dto';
 import { Shipment } from './shipment';
 import { ShipmentEntity } from './shipment.entity';
@@ -14,6 +15,7 @@ export class ShipmentService {
   constructor(
     private readonly repository: ShipmentRepository,
     private readonly packageRepository: PackageRepository,
+    private readonly locationRepository: LocationRepository,
   ) {}
 
   async createShipment(dto: ShipmentDTO): Promise<ShipmentEntity> {
@@ -41,6 +43,12 @@ export class ShipmentService {
   async addPackage(id: string, packageID: string): Promise<ShipmentEntity> {
     const shipment = await this.repository.get(id);
     if (!shipment) throw new NotFoundException('No Shipment were found.');
+
+    if (!shipment.isAvailableToPackages())
+      throw new BadRequestException(
+        'Sorry. This shipment is not available for packages right now.',
+      );
+
     const pakage = await this.packageRepository.get(packageID);
     if (!pakage) throw new NotFoundException('No Package were found.');
 

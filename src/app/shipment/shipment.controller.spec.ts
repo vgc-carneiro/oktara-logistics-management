@@ -11,7 +11,7 @@ describe('ShipmentController', () => {
   let responseMocked: ResponseMock;
 
   beforeEach(() => {
-    service = new ShipmentService(null, null);
+    service = new ShipmentService(null, null, null);
     controller = new ShipmentController(service);
     responseMocked = new ResponseMock();
   });

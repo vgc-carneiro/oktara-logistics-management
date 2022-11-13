@@ -47,4 +47,8 @@ export class ShipmentEntity {
     if (domain.estimated_route) this.estimated_route = domain.estimated_route;
     if (domain.finished_route) this.finished_route = domain.finished_route;
   }
+
+  isAvailableToPackages(): boolean {
+    return this.start_route === null;
+  }
 }
