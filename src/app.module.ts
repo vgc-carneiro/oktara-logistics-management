@@ -6,6 +6,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { HealthController } from './health/health.controller';
 import { DatabaseConfiguration } from './infrastructure/database/database.service';
 import { AppService } from './app.service';
+import { AppService } from './app.service';
 
 @Module({
   imports: [
