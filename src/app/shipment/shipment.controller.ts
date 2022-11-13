@@ -18,20 +18,20 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ExceptionControllerHandler } from '../../extensions/exception.controller.handler';
-import { PackageDTO } from './dto/package.dto';
-import { PackageService } from './package.service';
 import { isGuidValid } from '../../utils/guid.utils';
+import { ShipmentDTO } from './dto/shipment.dto';
+import { ShipmentService } from './shipment.service';
 
-@ApiTags('Packages')
-@Controller('api/packages')
-export class PackageController extends ExceptionControllerHandler {
-  constructor(private readonly service: PackageService) {
+@ApiTags('Shipment')
+@Controller('api/shipments')
+export class ShipmentController extends ExceptionControllerHandler {
+  constructor(private readonly service: ShipmentService) {
     super();
   }
 
   @ApiOperation({
-    summary: 'Create a Package',
-    description: 'Create a Package',
+    summary: 'Create a Shipment',
+    description: 'Create a Shipment',
   })
   @ApiCreatedResponse({
     status: 201,
@@ -43,9 +43,9 @@ export class PackageController extends ExceptionControllerHandler {
     description: 'Request Malformed',
   })
   @Post()
-  async create(@Body() pakage: PackageDTO, @Res({ passthrough: true }) res) {
+  async create(@Body() shipment: ShipmentDTO, @Res({ passthrough: true }) res) {
     try {
-      const result = await this.service.createPackage(pakage);
+      const result = await this.service.createShipment(shipment);
       res.status(HttpStatus.CREATED).set({ location: result.id });
     } catch (error) {
       this.handleResponseError(error);
@@ -53,16 +53,16 @@ export class PackageController extends ExceptionControllerHandler {
   }
 
   @ApiOperation({
-    summary: 'Retrieve a Package',
-    description: 'Retrive a specific Package',
+    summary: 'Retrieve a Shipment',
+    description: 'Retrive a specific Shipment',
   })
   @ApiOkResponse({
     status: 200,
-    description: 'Return a Package Object',
+    description: 'Return a Shipment Object',
   })
   @ApiNotFoundResponse({
     status: 404,
-    description: 'Package not found.',
+    description: 'Shipment not found.',
   })
   @ApiBadRequestResponse({
     status: 400,
@@ -80,35 +80,31 @@ export class PackageController extends ExceptionControllerHandler {
   }
 
   @ApiOperation({
-    summary: 'Assign a Location to a Package',
-    description: 'Assign a Location to a Package',
+    summary: 'Put a Package on the Shipment',
+    description: 'Put a Package on the Shipment',
   })
   @ApiOkResponse({
     status: 200,
     description:
-      'Assign a Location and return a Package Object with a Location',
+      'Put a Package on the Shipment and return a Shipment Object with an array of Packages',
   })
   @ApiNotFoundResponse({
     status: 404,
-    description: 'Package not found or Location not found.',
+    description: 'Shipment not found or Package not found.',
   })
   @ApiBadRequestResponse({
     status: 400,
     description: 'Request Malformed',
   })
-  @Patch(':id/location/:locationID')
-  async assignLocation(
+  @Patch(':id/packages/:packageID')
+  async addPackage(
     @Param('id') id: string,
-    @Param('locationID') locationID: string,
+    @Param('packageID') packageID: string,
   ) {
-    try {
-      if (!isGuidValid(id))
-        throw new BadRequestException('ID must be an UUID identifier.');
-      if (!isGuidValid(locationID))
-        throw new BadRequestException('LocationID must be an UUID identifier.');
-      return this.service.assignLocation(id, locationID);
-    } catch (error) {
-      this.handleResponseError(error);
-    }
+    if (!isGuidValid(id))
+      throw new BadRequestException('ID must be an UUID identifier.');
+    if (!isGuidValid(packageID))
+      throw new BadRequestException('PackageID must be an UUID identifier.');
+    return this.service.addPackage(id, packageID);
   }
 }

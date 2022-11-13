@@ -8,9 +8,9 @@ export class createShipmentTable1668226863437 implements MigrationInterface {
           id              uuid      default uuid_generate_v4() not null
               constraint "SHIPMENT_pk"
                   primary key,
-          start_route     date                                 not null,
-          estimated_route date                                 not null,
-          finished_route  date                                 not null,
+          start_route     timestamp                            not null,
+          estimated_route timestamp                            not null,
+          finished_route  timestamp                            not null,
           created_at      timestamp default now()              not null,
           updated_at      timestamp default now()              not null
       );
