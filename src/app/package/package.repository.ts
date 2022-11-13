@@ -16,4 +16,11 @@ export class PackageRepository {
     model.fromDomain(domain);
     return await this.repository.save(model);
   }
+
+  async get(id: string): Promise<PackageEntity> {
+    return this.repository.findOne({
+      relations: ['location'],
+      where: { id },
+    });
+  }
 }

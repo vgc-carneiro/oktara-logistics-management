@@ -61,5 +61,14 @@ describe('PackageController', () => {
         expect(error.message).toBe('No package were found.');
       }
     });
+
+    it('should throw a BadRequestException', async () => {
+      try {
+        await controller.get('123');
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('ID must be an UUID identifier.');
+      }
+    });
   });
 });

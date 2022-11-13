@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   Body,
   Controller,
   Get,
@@ -17,8 +18,8 @@ import {
 } from '@nestjs/swagger';
 import { ExceptionControllerHandler } from '../../extensions/exception.controller.handler';
 import { PackageDTO } from './dto/package.dto';
-import { PackageEntity } from './package.entity';
 import { PackageService } from './package.service';
+import { isGuidValid } from '../../utils/guid.utils';
 
 @ApiTags('Packages')
 @Controller('api/packages')
@@ -69,6 +70,8 @@ export class PackageController extends ExceptionControllerHandler {
   @Get(':id')
   async get(@Param('id') id: string) {
     try {
+      if (!isGuidValid(id))
+        throw new BadRequestException('ID must be an UUID identifier.');
       return this.service.get(id);
     } catch (error) {
       this.handleResponseError(error);

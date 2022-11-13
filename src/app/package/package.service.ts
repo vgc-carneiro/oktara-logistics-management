@@ -1,4 +1,8 @@
-import { BadRequestException, Injectable } from '@nestjs/common';
+import {
+  BadRequestException,
+  Injectable,
+  NotFoundException,
+} from '@nestjs/common';
 import { PackageDTO } from './dto/package.dto';
 import { Package } from './package';
 import { PackageEntity } from './package.entity';
@@ -17,6 +21,8 @@ export class PackageService {
   }
 
   async get(id: string): Promise<PackageEntity> {
-    return null;
+    const pakage = await this.repository.get(id);
+    if (!pakage) throw new NotFoundException('No package were found.');
+    return pakage;
   }
 }

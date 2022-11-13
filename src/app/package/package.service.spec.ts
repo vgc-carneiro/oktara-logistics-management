@@ -1,5 +1,8 @@
 import { packageDTOMock } from '../../mocks/package.dto.mock';
-import { packageFromDTOMock } from '../../mocks/package.mock';
+import {
+  packageFromDTOMock,
+  packageWarehouseMock,
+} from '../../mocks/package.mock';
 import { PackageRepository } from './package.repository';
 import { PackageService } from './package.service';
 
@@ -33,6 +36,26 @@ describe('PackageService', () => {
         expect(true).toBeFalsy();
       } catch (error) {
         expect(error.message).toBe('Error to insert a Package.');
+      }
+    });
+  });
+
+  describe('getPackage', () => {
+    it('should return a Package specific Package', async () => {
+      const pakage = packageWarehouseMock;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(pakage);
+      expect(await service.get(pakage.id)).toBe(pakage);
+    });
+
+    it('should throw a NotFoundException', async () => {
+      const pakage = packageWarehouseMock;
+      jest.spyOn(repository, 'get').mockResolvedValue(null);
+      try {
+        await service.get(pakage.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No package were found.');
       }
     });
   });
