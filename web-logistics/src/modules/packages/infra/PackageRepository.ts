@@ -1,6 +1,8 @@
 import { AxiosResponse } from 'axios'
 import { ServiceConfig } from '../../../shared/services/ServiceConfig'
 import { IListResponseData } from '../../../shared/types/IListResponseData'
+import { IPackageLocationDTO } from '../domain/dtos/IPackageLocationDTO'
+import { IPackageShipmentDTO } from '../domain/dtos/IPackageShipmentDTO'
 import { IPackage } from '../domain/entities/IPackage'
 import { IPackageRepository } from '../domain/repositories/IPackageRepository'
 
@@ -18,15 +20,15 @@ export class PackageRepository implements IPackageRepository {
     const response: AxiosResponse<IPackage> = await http.get(`/packages/${id}`)
     return response.data
   }
-  async assignLocation(packageID: string, locationID: string): Promise<IPackage> {
+  async assignLocation(dto: IPackageLocationDTO): Promise<IPackage> {
     const response: AxiosResponse<IPackage> = await http.patch(
-      `/packages/${packageID}/location/${locationID}`,
+      `/packages/${dto.packageID}/location/${dto.locationID}`,
     )
     return response.data
   }
-  async putShipment(packageID: string, shipmentID: string): Promise<IPackage> {
+  async putShipment(dto: IPackageShipmentDTO): Promise<IPackage> {
     const response: AxiosResponse<IPackage> = await http.patch(
-      `/packages/${packageID}/shipment/${shipmentID}`,
+      `/packages/${dto.packageID}/shipment/${dto.shipmentID}`,
     )
     return response.data
   }
