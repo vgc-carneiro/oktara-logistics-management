@@ -1,3 +1,4 @@
+import { AxiosResponse } from 'axios'
 import { ServiceConfig } from '../../../shared/services/ServiceConfig'
 import { IListResponseData } from '../../../shared/types/IListResponseData'
 import { IShipment } from '../domain/entities/IShipment'
@@ -5,16 +6,22 @@ import { IShipmentRepository } from '../domain/repositories/IShipmentRepository'
 
 const http = new ServiceConfig()
 export class ShipmentRepository implements IShipmentRepository {
-  getAll(): Promise<IListResponseData<IShipment>> {
-    throw new Error('Method not implemented.')
+  async getAll(): Promise<IListResponseData<IShipment>> {
+    const response: AxiosResponse<IListResponseData<IShipment>> = await http.get(`/shipments`)
+    return response.data
   }
-  post(dto: IShipment): Promise<IShipment> {
-    throw new Error('Method not implemented.')
+  async post(dto: IShipment): Promise<IShipment> {
+    const response: AxiosResponse<IShipment> = await http.post(`/shipments`, dto)
+    return response.data
   }
-  get(id: string): Promise<IShipment> {
-    throw new Error('Method not implemented.')
+  async get(id: string): Promise<IShipment> {
+    const response: AxiosResponse<IShipment> = await http.get(`/shipments/${id}`)
+    return response.data
   }
-  startDelivering(shipmentID: string): Promise<IShipment> {
-    throw new Error('Method not implemented.')
+  async startDelivering(shipmentID: string): Promise<IShipment> {
+    const response: AxiosResponse<IShipment> = await http.patch(
+      `/shipments/start-delivering/${shipmentID}`,
+    )
+    return response.data
   }
 }
