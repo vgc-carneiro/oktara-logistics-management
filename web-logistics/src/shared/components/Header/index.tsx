@@ -21,10 +21,6 @@ const headersData = [
     label: 'Shipments',
     href: '/shipments',
   },
-  {
-    label: 'Add Shipment',
-    href: '/shipments/new',
-  },
 ]
 
 const getMenuButtons = () => {
