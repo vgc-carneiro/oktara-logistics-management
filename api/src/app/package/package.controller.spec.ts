@@ -214,4 +214,42 @@ describe('PackageController', () => {
       }
     });
   });
+
+  describe('addShipmentAvailable', () => {
+    it('should return a Package with Shipment', async () => {
+      jest
+        .spyOn(service, 'addShipmentAvailable')
+        .mockResolvedValue(packagewithLocationMock);
+
+      expect(
+        await controller.addShipmentAvailable(
+          '87db7682-a310-4f35-a0e3-e569541783c0',
+        ),
+      ).toBe(packagewithLocationMock);
+    });
+
+    it('should return a Exception, UUID is not valid.', async () => {
+      try {
+        await controller.addShipmentAvailable('1234');
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('ID must be an UUID identifier.');
+      }
+    });
+
+    it('should return a NotFoundException', async () => {
+      jest.spyOn(service, 'addShipmentAvailable').mockImplementationOnce(() => {
+        throw new NotFoundException('No Package were found.');
+      });
+
+      try {
+        await controller.addShipmentAvailable(
+          '87db7682-a310-4f35-a0e3-e569541783c0',
+        );
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No Package were found.');
+      }
+    });
+  });
 });

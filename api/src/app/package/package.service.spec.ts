@@ -287,4 +287,58 @@ describe('PackageService', () => {
       expect(result.status_id).toBe(EStatusPackage.DELIVERED);
     });
   });
+
+  describe('deliverPackage', () => {
+    it('should throw a NotFoundException for Package', async () => {
+      const pakage = packageTransitMock;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(null);
+      try {
+        await service.addShipmentAvailable(pakage.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No Package were found.');
+      }
+    });
+
+    it('should throw a BadRequestException for isPossibleAssignLocation', async () => {
+      const pakage = packageTransitMock;
+      const shipment = shipmentMock;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(pakage);
+      try {
+        await service.addShipmentAvailable(pakage.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe(
+          'The Package it is not inside the warehouse anymore.',
+        );
+      }
+    });
+
+    it('should throw a NotFoundException for Shipment', async () => {
+      const pakage = packageWarehouseMock;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(pakage);
+      jest.spyOn(shipmentRepository, 'getAvailable').mockResolvedValue(null);
+      try {
+        await service.addShipmentAvailable(pakage.id);
+        expect(true).toBeFalsy();
+      } catch (error) {
+        expect(error.message).toBe('No Shipment were found.');
+      }
+    });
+
+    it('should return a pakage with shipment inside.', async () => {
+      const pakage = packageWarehouseMock;
+      const shipment = shipmentMock;
+
+      jest.spyOn(repository, 'get').mockResolvedValue(pakage);
+      jest
+        .spyOn(shipmentRepository, 'getAvailable')
+        .mockResolvedValue(shipment);
+      jest.spyOn(repository, 'update').mockResolvedValue(pakage);
+      expect(await service.addShipmentAvailable(pakage.id)).toBe(pakage);
+    });
+  });
 });
