@@ -1,9 +1,9 @@
 
-# API - Logistics Management System - By Vinicius Carneiro
+# Logistics Management System - By Vinicius Carneiro
 
 ## Description
 
-An API responsible to manage storage, inventory and transportation of packages.
+A project responsible to manage storage, inventory and transportation of packages.
 
 ## Prerequisites
 
@@ -15,69 +15,31 @@ An API responsible to manage storage, inventory and transportation of packages.
 ### Docker
 For executing the project, you just need to run the following command:
 ```bash
-docker-compose up -d
+docker-compose up -d --build
 ```
 This **Docker Compose** will create a PostgreSQL database and will seed some information.
 
-**IMPORTANT**: The seeds will populate information about: *Warehouses* and *Locations*. If you stop the containers and run them again, they will seed the database again.
+## Project Composition
 
-## Running the automated tests
+This repository has two projects inside:
 
-This App is using [Make](https://www.gnu.org/software/make/manual/make.html#Overview) for make easier your execution.
+## API:
 
-### Unit tests:
-```bash
-# With Make
-$ make setup
-$ make install
-$ make tests
+The API has his own [README.md](https://github.com/vgc-carneiro/oktara-logistics-management/tree/master/api).
 
-# Without Make
-$ docker volume create api-log-manager-nodemodules
-$ docker-compose -f docker-compose.builder.yml run --rm install
-$ docker-compose -f docker-compose.test.yml up
-```
+**Tech Stack:**
+- [NodeJS v18.12](https://nodejs.org/dist/latest-v18.x/docs/api/)
+- [NestJS v9.0.0](https://docs.nestjs.com/)
+- [Swagger](https://docs.nestjs.com/openapi/introduction)
+- [TypeORM](https://docs.nestjs.com/recipes/sql-typeorm)
+- [Jest v28.1.8](https://jestjs.io/docs/28.x/getting-started)
 
+## Frontend:
 
-### Check the coverage:
-```bash
-# With Make
-$ make setup
-$ make install
-$ make cover
+The frontend has his own [README.md](https://github.com/vgc-carneiro/oktara-logistics-management/tree/master/web-logistics).
 
-# Without Make
-$ docker volume create api-log-manager-nodemodules
-$ docker-compose -f docker-compose.builder.yml run --rm install
-$ docker-compose -f docker-compose.test.cov.yml up
-```
-
-## Development
-
-```bash
-# With Make
-$ make setup
-$ make install
-$ make dev
-
-# Without Make
-$ docker volume create api-log-manager-nodemodules
-$ docker-compose -f docker-compose.builder.yml run --rm install
-$ docker-compose -f docker-compose.dev.yml up
-```
-
-
-
-
-## Swagger
-This projects uses a Swagger as API Documentation. The path is: **/api-docs**
-
-## HealthCheck
-
-This project uses a Terminus as a Healthcheck. In case you needed the path is: **/healthcheck**
-
-## ERD
-
-This is the ERD (Entity Relationship Diagram) for the project:
-
-![ERD - LOG-MANAGER](./assets/ERD.png)
+**Tech Stack:**
+- [NodeJS v18.12](https://nodejs.org/dist/latest-v18.x/docs/api/)
+- [ReactJS v18.0.25](https://reactjs.org/docs/getting-started.html)
+- [Material UI v5.10.13](https://mui.com/pt/material-ui/getting-started/overview/)
+- [Axios](https://axios-http.com/docs/intro)
