@@ -1,7 +1,12 @@
 import {
   AlertColor,
+  Box,
   Button,
+  Card,
+  CardActions,
+  CardContent,
   Grid,
+  Modal,
   Paper,
   Table,
   TableBody,
@@ -9,9 +14,10 @@ import {
   TableContainer,
   TableHead,
   TableRow,
+  Typography,
 } from '@mui/material'
 import { Container } from '@mui/system'
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import PopInformation from '../../../../../shared/components/PopInformartion'
 import StatusPackage from '../../../../../shared/components/StatusPackage'
 import { EStatusPackage } from '../../../../packages/domain/entities/EStatusPackage'
@@ -24,22 +30,44 @@ import { IShipmentDTO } from '../../dtos/IShipmentDTO'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import StartDeliveringShipment from '../../usecases/StartDeliveringShipment'
 import moment from 'moment'
+import DeliverPackage from '../../../../packages/domain/usecase/DeliverPackage'
 
 interface Props {
   getAllShipments: GetAllShipments
   createShipment: CreateShipment
   startDeliveringShipment: StartDeliveringShipment
+  deliverPackage: DeliverPackage
 }
 
-const ListShipment = ({ getAllShipments, createShipment, startDeliveringShipment }: Props) => {
+const ListShipment = ({
+  getAllShipments,
+  createShipment,
+  startDeliveringShipment,
+  deliverPackage,
+}: Props) => {
   const [shipmentValues, setShipments] = useState([] as IShipment[])
   const [information, setInformation] = useState('')
   const [severityInformation, setSeverity] = useState('warning' as AlertColor)
-  const [open, setOpen] = useState(true)
+  const [openValue, setOpen] = useState(false)
 
-  const openCollapse = () => {
-    setOpen(!open)
+  const style = {
+    position: 'absolute' as 'absolute',
+    top: '50%',
+    left: '50%',
+    transform: 'translate(-50%, -50%)',
+    width: 900,
+    height: 450,
+    bgcolor: 'background.paper',
+    border: '2px solid #000',
+    boxShadow: 24,
+    overflowY: 'scroll',
+    p: 4,
   }
+
+  const openModal = (open: boolean) => {
+    setOpen(open)
+  }
+  const closeModal = () => setOpen(false)
 
   const checkStatus = (startRoute?: Date, finishedRoute?: Date) => {
     if (finishedRoute !== null) return EStatusPackage.DELIVERED
@@ -88,10 +116,52 @@ const ListShipment = ({ getAllShipments, createShipment, startDeliveringShipment
       await startDeliveringShipment.execute(id)
       showPopInformation('The truck left for delivery!', 'success')
       loadData()
+    } catch (e: any) {
+      showPopInformation(
+        e?.response?.status + '- ' + e?.response?.data?.message,
+        'error' as AlertColor,
+      )
+    }
+  }
+
+  const confirmDelivery = async (id: string) => {
+    try {
+      await deliverPackage.execute(id)
+      loadData()
     } catch (e) {
       showPopInformation('' + e, 'error')
       console.log(e)
     }
+  }
+
+  const basicCard = (
+    latitude: number,
+    longitude: number,
+    id: string,
+    delivery: boolean,
+    status: EStatusPackage,
+  ) => {
+    return (
+      <Card sx={{ minWidth: 275 }}>
+        <CardContent>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            Latitude: {latitude}
+          </Typography>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            Longitude: {longitude}
+          </Typography>
+        </CardContent>
+        <CardActions>
+          {delivery ? (
+            <Button size="small" variant="contained" onClick={event => confirmDelivery(id)}>
+              Confirm delivery
+            </Button>
+          ) : (
+            <StatusPackage information={status} />
+          )}
+        </CardActions>
+      </Card>
+    )
   }
 
   return (
@@ -132,7 +202,8 @@ const ListShipment = ({ getAllShipments, createShipment, startDeliveringShipment
                       <Button
                         variant="contained"
                         startIcon={<InventoryIcon />}
-                        onClick={openCollapse}
+                        onClick={event => openModal(true)}
+                        disabled={row.finished_route !== null || row.start_route === null}
                       >
                         {row.packages?.length}
                       </Button>
@@ -163,6 +234,33 @@ const ListShipment = ({ getAllShipments, createShipment, startDeliveringShipment
                         </Button>
                       )}
                     </TableCell>
+                    {row.finished_route === null ? (
+                      <Modal
+                        open={openValue}
+                        onClose={closeModal}
+                        aria-labelledby="modal-modal-title"
+                        aria-describedby="modal-modal-description"
+                      >
+                        <Box sx={style}>
+                          <Typography id="modal-modal-title" variant="h6" component="h2">
+                            Packages
+                          </Typography>
+                          <Grid container direction={'row'}>
+                            {row.packages?.map(pakage => (
+                              <Grid item xs={4} sx={{ mb: 4 }}>
+                                {basicCard(
+                                  pakage.latitude_destination,
+                                  pakage.longitude_destination,
+                                  pakage.id,
+                                  pakage.status_id !== EStatusPackage.DELIVERED,
+                                  pakage.status_id,
+                                )}
+                              </Grid>
+                            ))}
+                          </Grid>
+                        </Box>
+                      </Modal>
+                    ) : null}
                   </TableRow>
                 ))}
               </TableBody>

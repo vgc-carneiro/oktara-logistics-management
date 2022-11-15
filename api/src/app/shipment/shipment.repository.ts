@@ -14,6 +14,9 @@ export class ShipmentRepository {
   async find(): Promise<ShipmentEntity[]> {
     return await this.repository.find({
       relations: ['packages'],
+      order: {
+        start_route: 'DESC',
+      },
     });
   }
 
