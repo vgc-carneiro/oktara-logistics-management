@@ -3,7 +3,7 @@
 
 ## Description
 
-A project responsible to manage storage, inventory and transportation of packages.
+This project is responsible to manage the storage, inventory, and transportation of packages.
 
 ## Prerequisites
 
@@ -25,7 +25,7 @@ This repository has two projects inside:
 
 ## API:
 
-The API has his own [README.md](https://github.com/vgc-carneiro/oktara-logistics-management/tree/master/api).
+The API has its own [README.md](https://github.com/vgc-carneiro/oktara-logistics-management/tree/master/api).
 
 **Tech Stack:**
 - [NodeJS v18.12](https://nodejs.org/dist/latest-v18.x/docs/api/)
@@ -36,7 +36,7 @@ The API has his own [README.md](https://github.com/vgc-carneiro/oktara-logistics
 
 ## Frontend:
 
-The frontend has his own [README.md](https://github.com/vgc-carneiro/oktara-logistics-management/tree/master/web-logistics).
+The frontend has its own [README.md](https://github.com/vgc-carneiro/oktara-logistics-management/tree/master/web-logistics).
 
 **Tech Stack:**
 - [NodeJS v18.12](https://nodejs.org/dist/latest-v18.x/docs/api/)
