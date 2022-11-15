@@ -1,7 +1,6 @@
 import {
   AlertColor,
   Button,
-  Chip,
   Grid,
   Paper,
   Table,
@@ -22,16 +21,25 @@ import GetAllShipments from '../../usecases/GetAllShipments'
 import AddIcon from '@mui/icons-material/Add'
 import InventoryIcon from '@mui/icons-material/Inventory'
 import { IShipmentDTO } from '../../dtos/IShipmentDTO'
+import LocalShippingIcon from '@mui/icons-material/LocalShipping'
+import StartDeliveringShipment from '../../usecases/StartDeliveringShipment'
+import moment from 'moment'
 
 interface Props {
   getAllShipments: GetAllShipments
   createShipment: CreateShipment
+  startDeliveringShipment: StartDeliveringShipment
 }
 
-const ListShipment = ({ getAllShipments, createShipment }: Props) => {
+const ListShipment = ({ getAllShipments, createShipment, startDeliveringShipment }: Props) => {
   const [shipmentValues, setShipments] = useState([] as IShipment[])
   const [information, setInformation] = useState('')
   const [severityInformation, setSeverity] = useState('warning' as AlertColor)
+  const [open, setOpen] = useState(true)
+
+  const openCollapse = () => {
+    setOpen(!open)
+  }
 
   const checkStatus = (startRoute?: Date, finishedRoute?: Date) => {
     if (finishedRoute !== null) return EStatusPackage.DELIVERED
@@ -75,6 +83,17 @@ const ListShipment = ({ getAllShipments, createShipment }: Props) => {
     }
   }
 
+  const startDelivery = async (id: string) => {
+    try {
+      await startDeliveringShipment.execute(id)
+      showPopInformation('The truck left for delivery!', 'success')
+      loadData()
+    } catch (e) {
+      showPopInformation('' + e, 'error')
+      console.log(e)
+    }
+  }
+
   return (
     <Container maxWidth="xl">
       <Grid container direction={'row'}>
@@ -98,22 +117,52 @@ const ListShipment = ({ getAllShipments, createShipment }: Props) => {
                   <TableCell align="center">Started Route At</TableCell>
                   <TableCell align="center">Estimated Duration Route</TableCell>
                   <TableCell align="center">Finished Route At</TableCell>
+                  <TableCell align="center">Actions</TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
                 {shipmentValues.map(row => (
                   <TableRow key={row.id} sx={{ '&:last-child td, &:last-child th': { border: 0 } }}>
-                    <TableCell component="th" scope="row" align="center">
+                    <TableCell align="center">
                       <StatusPackage
                         information={checkStatus(row.start_route, row.finished_route)}
                       />
                     </TableCell>
                     <TableCell align="center">
-                      <Chip icon={<InventoryIcon />} label={row.packages?.length} />
+                      <Button
+                        variant="contained"
+                        startIcon={<InventoryIcon />}
+                        onClick={openCollapse}
+                      >
+                        {row.packages?.length}
+                      </Button>
                     </TableCell>
-                    <TableCell align="center">{row.start_route?.toLocaleString()}</TableCell>
-                    <TableCell align="center">{row.estimated_route?.toLocaleString()}</TableCell>
-                    <TableCell align="center">{row.finished_route?.toLocaleString()}</TableCell>
+                    <TableCell align="center">
+                      {row.start_route ? moment(row.start_route).format('DD/MM/yyyy hh:mm') : '-'}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.estimated_route
+                        ? moment(row.estimated_route).format('DD/MM/yyyy hh:mm')
+                        : '-'}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.finished_route
+                        ? moment(row.finished_route).format('DD/MM/yyyy hh:mm')
+                        : '-'}
+                    </TableCell>
+                    <TableCell align="center">
+                      {row.start_route ? (
+                        '-'
+                      ) : (
+                        <Button
+                          variant="contained"
+                          startIcon={<LocalShippingIcon />}
+                          onClick={event => startDelivery(row.id)}
+                        >
+                          Start Delivery
+                        </Button>
+                      )}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

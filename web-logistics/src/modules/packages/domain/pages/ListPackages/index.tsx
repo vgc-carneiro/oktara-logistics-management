@@ -35,6 +35,7 @@ const ListPackages = ({ getAllPackages, putPackageOnShipmentAvailable }: Props) 
       await putPackageOnShipmentAvailable.execute(id)
       loadData()
     } catch (e: any) {
+      setInformation(e?.response?.status + ' - ' + e?.response?.data?.message)
       console.log(e)
     }
   }
