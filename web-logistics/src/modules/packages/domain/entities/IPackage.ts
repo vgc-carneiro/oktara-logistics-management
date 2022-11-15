@@ -11,4 +11,5 @@ export interface IPackage {
   longitude_destination: number
   shipment?: IShipment
   location?: ILocation
+  distance?: number
 }

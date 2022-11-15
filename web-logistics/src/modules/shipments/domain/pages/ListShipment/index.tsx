@@ -137,6 +137,7 @@ const ListShipment = ({
   const basicCard = (
     latitude: number,
     longitude: number,
+    distance: number,
     id: string,
     delivery: boolean,
     status: EStatusPackage,
@@ -149,6 +150,9 @@ const ListShipment = ({
           </Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             Longitude: {longitude}
+          </Typography>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            Distance from Warehouse: {distance} KM
           </Typography>
         </CardContent>
         <CardActions>
@@ -251,6 +255,7 @@ const ListShipment = ({
                                 {basicCard(
                                   pakage.latitude_destination,
                                   pakage.longitude_destination,
+                                  pakage.distance ?? 99999999,
                                   pakage.id,
                                   pakage.status_id !== EStatusPackage.DELIVERED,
                                   pakage.status_id,
