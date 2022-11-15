@@ -1,5 +1,6 @@
 import {
   AlertColor,
+  Button,
   Grid,
   Paper,
   Table,
@@ -15,15 +16,28 @@ import PopInformation from '../../../../../shared/components/PopInformartion'
 import StatusPackage from '../../../../../shared/components/StatusPackage'
 import { IPackage } from '../../entities/IPackage'
 import GetAllPackages from '../../usecase/GetAllPackages'
+import LocalShippingIcon from '@mui/icons-material/LocalShipping'
+import AddIcon from '@mui/icons-material/Add'
+import PutPackageOnShipmentAvailable from '../../usecase/PutPackageOnShipmentAvailable'
 
 interface Props {
   getAllPackages: GetAllPackages
+  putPackageOnShipmentAvailable: PutPackageOnShipmentAvailable
 }
 
-const ListPackages = ({ getAllPackages }: Props) => {
+const ListPackages = ({ getAllPackages, putPackageOnShipmentAvailable }: Props) => {
   const [packagesValues, setPackages] = useState([] as IPackage[])
   const [information, setInformation] = useState('')
   const [severityInformation, setSeverity] = useState('warning' as AlertColor)
+
+  const handleAssignShipment = async (id: string) => {
+    try {
+      await putPackageOnShipmentAvailable.execute(id)
+      loadData()
+    } catch (e: any) {
+      console.log(e)
+    }
+  }
 
   const loadData = async () => {
     try {
@@ -43,7 +57,6 @@ const ListPackages = ({ getAllPackages }: Props) => {
       })
 
       setPackages(sorted)
-      console.log(sorted)
     } catch (e: any) {
       setInformation('No Packages were found.')
       console.log(e)
@@ -89,7 +102,20 @@ const ListPackages = ({ getAllPackages }: Props) => {
                     <TableCell align="center">{row.latitude_destination}</TableCell>
                     <TableCell align="center">{row.longitude_destination}</TableCell>
                     <TableCell align="center">{row.location?.shelf}</TableCell>
-                    <TableCell align="center">{row.shipment?.id}</TableCell>
+                    <TableCell align="center">
+                      {row.shipment_id ? (
+                        <LocalShippingIcon />
+                      ) : (
+                        <Button
+                          key={row.id}
+                          variant="contained"
+                          startIcon={<AddIcon />}
+                          onClick={event => handleAssignShipment(row.id)}
+                        >
+                          Transfer to Truck
+                        </Button>
+                      )}
+                    </TableCell>
                   </TableRow>
                 ))}
               </TableBody>

@@ -10,9 +10,7 @@ const ViewWarehouse = ({ getAllWarehouses }: Props) => {
   useEffect(() => {
     const loadData = async () => {
       try {
-        const resp = await getAllWarehouses.execute()
-
-        console.log(resp)
+        await getAllWarehouses.execute()
       } catch (e: any) {
         console.log(e)
       }

@@ -31,6 +31,12 @@ export class ShipmentRepository {
     });
   }
 
+  async getAvailable(): Promise<ShipmentEntity> {
+    return this.repository.findOne({
+      where: { start_route: IsNull() },
+    });
+  }
+
   async update(entity: ShipmentEntity): Promise<ShipmentEntity> {
     return await this.repository.save(entity);
   }

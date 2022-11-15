@@ -9,5 +9,6 @@ export interface IPackageRepository {
   get(id: string): Promise<IPackage>
   assignLocation(dto: IPackageLocationDTO): Promise<IPackage>
   putShipment(dto: IPackageShipmentDTO): Promise<IPackage>
+  putToShipmentAvailable(id: string): Promise<IPackage>
   deliverPackage(packageID: string): Promise<IPackage>
 }

@@ -43,7 +43,6 @@ const ListShipment = ({ getAllShipments, createShipment }: Props) => {
     try {
       setInformation('')
       const resp = await getAllShipments.execute()
-      console.log(resp)
       setShipments(resp)
     } catch (e: any) {
       setInformation('No Shipments were found.')

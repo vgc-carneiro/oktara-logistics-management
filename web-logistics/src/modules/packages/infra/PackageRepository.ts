@@ -8,6 +8,10 @@ import { IPackageRepository } from '../domain/repositories/IPackageRepository'
 
 const http = new ServiceConfig()
 export class PackageRepository implements IPackageRepository {
+  async putToShipmentAvailable(id: string): Promise<IPackage> {
+    const response: AxiosResponse<IPackage> = await http.patch(`/packages/${id}/shipment`)
+    return response.data
+  }
   async getAll(): Promise<IPackage[]> {
     const response: AxiosResponse<IPackage[]> = await http.get(`/packages`)
     return response.data

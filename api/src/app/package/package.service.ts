@@ -62,6 +62,26 @@ export class PackageService {
     return await this.repository.get(pakage.id);
   }
 
+  async addShipmentAvailable(id: string): Promise<PackageEntity> {
+    const pakage = await this.repository.get(id);
+    if (!pakage) throw new NotFoundException('No Package were found.');
+
+    if (!pakage.isPossibleAssignLocation())
+      throw new BadRequestException(
+        'The Package it is not inside the warehouse anymore.',
+      );
+
+    const shipment = await this.shipmentRepository.getAvailable();
+    if (!shipment) throw new NotFoundException('No Shipment were found.');
+
+    pakage.location = null;
+    pakage.shipment = shipment;
+
+    const updated = await this.repository.update(pakage);
+
+    return updated;
+  }
+
   async addShipment(id: string, shipmentID: string): Promise<PackageEntity> {
     const pakage = await this.repository.get(id);
     if (!pakage) throw new NotFoundException('No Package were found.');
