@@ -25,6 +25,8 @@ This repository has two projects inside:
 
 ## API:
 
+Location: http://localhost:3335/api-docs
+
 The API has its own [README.md](https://github.com/vgc-carneiro/oktara-logistics-management/tree/master/api).
 
 **Tech Stack:**
@@ -35,6 +37,8 @@ The API has its own [README.md](https://github.com/vgc-carneiro/oktara-logistics
 - [Jest v28.1.8](https://jestjs.io/docs/28.x/getting-started)
 
 ## Frontend:
+
+Location: http://localhost:3000/
 
 The frontend has its own [README.md](https://github.com/vgc-carneiro/oktara-logistics-management/tree/master/web-logistics).
 
