@@ -1,13 +1,12 @@
 import { AxiosResponse } from 'axios'
 import { ServiceConfig } from '../../../shared/services/ServiceConfig'
-import { IListResponseData } from '../../../shared/types/IListResponseData'
 import { IShipment } from '../domain/entities/IShipment'
 import { IShipmentRepository } from '../domain/repositories/IShipmentRepository'
 
 const http = new ServiceConfig()
 export class ShipmentRepository implements IShipmentRepository {
-  async getAll(): Promise<IListResponseData<IShipment>> {
-    const response: AxiosResponse<IListResponseData<IShipment>> = await http.get(`/shipments`)
+  async getAll(): Promise<IShipment[]> {
+    const response: AxiosResponse<Promise<IShipment[]>> = await http.get(`/shipments`)
     return response.data
   }
   async post(dto: IShipment): Promise<IShipment> {

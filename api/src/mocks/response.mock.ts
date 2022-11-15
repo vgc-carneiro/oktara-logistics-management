@@ -11,5 +11,10 @@ export class ResponseMock {
 
   set(header) {
     this.headers.push(header);
+    return this;
+  }
+
+  json(any) {
+    return;
   }
 }

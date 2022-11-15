@@ -47,7 +47,9 @@ export class LocationEntity {
   })
   warehouse?: WarehouseEntity;
 
-  @OneToOne(() => PackageEntity, (pakage: PackageEntity) => pakage.location)
+  @OneToOne(() => PackageEntity, (pakage: PackageEntity) => pakage.location, {
+    eager: true,
+  })
   @JoinTable({ name: 'package' })
   @JoinColumn({
     name: 'id',

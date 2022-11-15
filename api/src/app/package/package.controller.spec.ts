@@ -11,7 +11,6 @@ import {
   packageWithShipmentMock,
 } from '../../mocks/package.mock';
 import { ResponseMock } from '../../mocks/response.mock';
-import { shipmentMock } from '../../mocks/shipment.mock';
 import { PackageController } from './package.controller';
 import { PackageService } from './package.service';
 

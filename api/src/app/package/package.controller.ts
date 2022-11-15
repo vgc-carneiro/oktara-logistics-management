@@ -67,7 +67,10 @@ export class PackageController extends ExceptionControllerHandler {
   async create(@Body() pakage: PackageDTO, @Res({ passthrough: true }) res) {
     try {
       const result = await this.service.createPackage(pakage);
-      res.status(HttpStatus.CREATED).set({ location: result.id });
+      res
+        .status(HttpStatus.CREATED)
+        .set({ location: result.id })
+        .json({ id: result.id });
     } catch (error) {
       this.handleResponseError(error);
     }

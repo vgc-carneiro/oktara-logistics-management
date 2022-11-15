@@ -1,4 +1,5 @@
 import { useEffect } from 'react'
+import { Button } from '@mui/material'
 import GetAllWarehouses from '../../domain/usecases/GetAllWarehouses'
 
 interface Props {
@@ -8,7 +9,6 @@ interface Props {
 const ViewWarehouse = ({ getAllWarehouses }: Props) => {
   useEffect(() => {
     const loadData = async () => {
-      console.log('running loaddata')
       try {
         const resp = await getAllWarehouses.execute()
 
@@ -20,7 +20,7 @@ const ViewWarehouse = ({ getAllWarehouses }: Props) => {
     loadData()
   }, [])
 
-  return <button>Teste Component</button>
+  return <Button variant="contained">List Warehouses</Button>
 }
 
 export default ViewWarehouse
