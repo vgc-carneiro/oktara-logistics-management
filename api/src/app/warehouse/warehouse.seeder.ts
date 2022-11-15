@@ -22,6 +22,9 @@ export class WarehouseSeeder {
       },
     ];
 
+    const warehouseStored = await this.repository.find();
+    if(warehouseStored.length > 0) return
+
     data_seeder.forEach(async (warehouse) => {
       try {
         const warehouseEntity = await this.repository.save(warehouse);

@@ -3,13 +3,13 @@ services:
   postgres:
     container_name: logistics-manager-postgres
     build:
-      context: ./.postgres
+      context: ./api/.postgres
       dockerfile: Dockerfile
     shm_size: 4g
     ports:
       - 5432:5432
     volumes:
-      - './.postgres/data:/var/lib/postgresql/data:rw'
+      - './api/.postgres/data:/var/lib/postgresql/data:rw'
     environment:
       - POSTGRES_DB=logistics
       - POSTGRES_USER=postgres
@@ -18,7 +18,7 @@ services:
       - POSTGRES_HOST_AUTH_METHOD=trust
 
   app:
-    build: .
+    build: ./api/
     image: api-logistics-manager
     container_name: api-logistics-manager
     hostname: localhost
@@ -35,7 +35,20 @@ services:
       - MIGRATION_PATH=./dist/infrastructure/migrations/*.js
       - MIGRATION_TABLE=migrations
       - PATH_ENTITIES=./../**/*.entity.js
-      - ENABLE_SEED=false
+      - ENABLE_SEED=true
     command: npm run start:prod:migration
     ports:
       - 3335:3335
+
+  web:
+    build: ./web-logistics/
+    image: web-logistics
+    container_name: logistics-manager
+    hostname: localhost
+    links:
+      - app
+    environment:
+      - REACT_APP_BASE_URL=http://localhost:3335/api/
+    command: npm start
+    ports:
+      - 3000:3000
