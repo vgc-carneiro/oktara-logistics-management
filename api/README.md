@@ -10,17 +10,6 @@ An API responsible to manage storage, inventory and transportation of packages.
 - [Docker](https://docs.docker.com/get-docker/) >= 20
 - [Docker Compose](https://docs.docker.com/compose/install/) >= 1.29
 
-## Running the app
-
-### Docker
-For executing the project, you just need to run the following command:
-```bash
-docker-compose up -d
-```
-This **Docker Compose** will create a PostgreSQL database and will seed some information.
-
-**IMPORTANT**: The seeds will populate information about: *Warehouses* and *Locations*. If you stop the containers and run them again, they will seed the database again.
-
 ## Running the automated tests
 
 This App is using [Make](https://www.gnu.org/software/make/manual/make.html#Overview) for make easier your execution.

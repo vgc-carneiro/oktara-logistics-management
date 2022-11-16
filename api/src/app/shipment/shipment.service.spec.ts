@@ -2,27 +2,35 @@ import {
   shipmentEmptyDTOMock,
   shipmentFromDTOMock,
   shipmentMock,
+  shipmentWithPackageMock,
   shipmentWithPackagesInTransitMock,
   shipmentWithPackagesInWarehouseMock,
 } from '../../mocks/shipment.mock';
+import { warehouseMock } from '../../mocks/warehouse.mock';
+import { WarehouseRepository } from '../warehouse/warehouse.repository';
 import { ShipmentRepository } from './shipment.repository';
 import { ShipmentService } from './shipment.service';
 
 describe('PackageService', () => {
   let service: ShipmentService;
   let repository: ShipmentRepository;
+  let warehouseRepository: WarehouseRepository;
 
   beforeEach(() => {
     repository = new ShipmentRepository(null);
-    service = new ShipmentService(repository);
+    warehouseRepository = new WarehouseRepository(null)
+    service = new ShipmentService(repository, warehouseRepository);
   });
 
   describe('listShipments', () => {
     it('should return a list of shipments', async () => {
-      const shipment = shipmentMock;
+      const shipment = shipmentWithPackageMock;
       const array = [shipment];
+      const warehouse = warehouseMock;
+      const warehouseArray = [warehouseMock];
 
       jest.spyOn(repository, 'find').mockResolvedValue(array);
+      jest.spyOn(warehouseRepository, 'find').mockResolvedValue(warehouseArray);
       expect(await service.list()).toBe(array);
     });
     it('should return a NotFoundException', async () => {

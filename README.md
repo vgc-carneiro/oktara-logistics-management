@@ -3,7 +3,7 @@
 
 ## Description
 
-A project responsible to manage storage, inventory and transportation of packages.
+This project is responsible to manage the storage, inventory, and transportation of packages.
 
 ## Prerequisites
 
@@ -11,6 +11,13 @@ A project responsible to manage storage, inventory and transportation of package
 - [Docker Compose](https://docs.docker.com/compose/install/) >= 1.29
 
 ## Running the app
+
+### IMPORTANT
+
+Before the execution, there are two steps to consider:
+1. This project uses a [Google Maps API](https://developers.google.com/maps/documentation), so for the complete use of the functions developed here, you **must** put your [credential key](https://developers.google.com/maps/get-started#api-key) in the file: **./web-logistics/src/shared/components/Map/key.ts**
+
+2. The Warehouse location is: **latitude: -23.315089, longitude: -51.175864**, therefor is **strongly** recommended to use packages location near the Warehouse location.
 
 ### Docker
 For executing the project, you just need to run the following command:
@@ -25,7 +32,9 @@ This repository has two projects inside:
 
 ## API:
 
-The API has his own [README.md](https://github.com/vgc-carneiro/oktara-logistics-management/tree/master/api).
+Location: http://localhost:3335/api-docs
+
+The API has its own [README.md](https://github.com/vgc-carneiro/oktara-logistics-management/tree/master/api).
 
 **Tech Stack:**
 - [NodeJS v18.12](https://nodejs.org/dist/latest-v18.x/docs/api/)
@@ -36,7 +45,9 @@ The API has his own [README.md](https://github.com/vgc-carneiro/oktara-logistics
 
 ## Frontend:
 
-The frontend has his own [README.md](https://github.com/vgc-carneiro/oktara-logistics-management/tree/master/web-logistics).
+Location: http://localhost:3000/
+
+The frontend has its own [README.md](https://github.com/vgc-carneiro/oktara-logistics-management/tree/master/web-logistics).
 
 **Tech Stack:**
 - [NodeJS v18.12](https://nodejs.org/dist/latest-v18.x/docs/api/)
