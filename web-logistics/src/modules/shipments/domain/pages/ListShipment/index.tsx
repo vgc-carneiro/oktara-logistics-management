@@ -17,7 +17,7 @@ import {
   Typography,
 } from '@mui/material'
 import { Container } from '@mui/system'
-import { Fragment, useEffect, useState } from 'react'
+import { SetStateAction, useCallback, useEffect, useMemo, useState } from 'react'
 import PopInformation from '../../../../../shared/components/PopInformartion'
 import StatusPackage from '../../../../../shared/components/StatusPackage'
 import { EStatusPackage } from '../../../../packages/domain/entities/EStatusPackage'
@@ -26,11 +26,21 @@ import CreateShipment from '../../usecases/CreateShipment'
 import GetAllShipments from '../../usecases/GetAllShipments'
 import AddIcon from '@mui/icons-material/Add'
 import InventoryIcon from '@mui/icons-material/Inventory'
+import RouteIcon from '@mui/icons-material/Route'
 import { IShipmentDTO } from '../../dtos/IShipmentDTO'
 import LocalShippingIcon from '@mui/icons-material/LocalShipping'
 import StartDeliveringShipment from '../../usecases/StartDeliveringShipment'
 import moment from 'moment'
 import DeliverPackage from '../../../../packages/domain/usecase/DeliverPackage'
+import { IRouteDTO, IWayPointDTO } from '../../../../../shared/components/Map/dto/IRouteDTO'
+import { IPackage } from '../../../../packages/domain/entities/IPackage'
+import {
+  GoogleMap,
+  LoadScript,
+  DirectionsService,
+  DirectionsRenderer,
+} from '@react-google-maps/api'
+import { GoogleMapsKey } from '../../../../../shared/components/Map/key'
 
 interface Props {
   getAllShipments: GetAllShipments
@@ -49,6 +59,17 @@ const ListShipment = ({
   const [information, setInformation] = useState('')
   const [severityInformation, setSeverity] = useState('warning' as AlertColor)
   const [openValue, setOpen] = useState(false)
+  const [showMap, setShowMap] = useState(false)
+  const [route, setRoute] = useState<IRouteDTO | null>(null)
+  const [origin, setOrigin] = useState<google.maps.LatLngLiteral | null>({
+    lat: -23.315089,
+    lng: -51.175864,
+  })
+  const [destination, setDestination] = useState<google.maps.LatLngLiteral | null>(null)
+  const [waypoints, setWaypoints] = useState<google.maps.DirectionsWaypoint[] | null>(null)
+  const [response, setResponse] = useState(null)
+  const defaultLocation = { lat: -23.315089, lng: -51.175864 }
+  const key = GoogleMapsKey
 
   const style = {
     position: 'absolute' as 'absolute',
@@ -69,7 +90,7 @@ const ListShipment = ({
   }
   const closeModal = () => setOpen(false)
 
-  const checkStatus = (startRoute?: Date, finishedRoute?: Date) => {
+  const checkStatus = (startRoute?: Date, finishedRoute?: Date): EStatusPackage => {
     if (finishedRoute !== null) return EStatusPackage.DELIVERED
     if (startRoute !== null) return EStatusPackage.TRANSIT
     return EStatusPackage.WAREHOUSE
@@ -100,8 +121,13 @@ const ListShipment = ({
 
   const handleClickNewShipment = async () => {
     try {
+      openModal(false)
       await createShipment.execute({} as IShipmentDTO)
       showPopInformation('Shipment created succesfully!', 'success')
+      setDestination(null)
+      setWaypoints(null)
+      setResponse(null)
+      setShowMap(false)
       loadData()
     } catch (error: any) {
       showPopInformation(
@@ -137,6 +163,7 @@ const ListShipment = ({
   const basicCard = (
     latitude: number,
     longitude: number,
+    distance: number,
     id: string,
     delivery: boolean,
     status: EStatusPackage,
@@ -149,6 +176,9 @@ const ListShipment = ({
           </Typography>
           <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
             Longitude: {longitude}
+          </Typography>
+          <Typography sx={{ fontSize: 14 }} color="text.secondary" gutterBottom>
+            Distance from Warehouse: {distance} KM
           </Typography>
         </CardContent>
         <CardActions>
@@ -164,6 +194,59 @@ const ListShipment = ({
     )
   }
 
+  const generateRoute = (id: string) => {
+    const shipmentToRoute = shipmentValues.filter(obj => obj.id === id)[0]
+    if (!shipmentToRoute.packages) return
+    setShowMap(true)
+    const copyPackages = [...shipmentToRoute.packages]
+
+    const lastPackage = copyPackages.pop() as IPackage
+    const waypoints = copyPackages
+
+    const waypointsInMount: IWayPointDTO[] = []
+
+    waypoints?.map(waypoint => {
+      waypointsInMount.push({
+        location: {
+          lat: +waypoint.latitude_destination,
+          lng: +waypoint.longitude_destination,
+        },
+      })
+    })
+
+    setWaypoints(waypointsInMount)
+
+    setDestination({
+      lat: +lastPackage?.latitude_destination,
+      lng: +lastPackage?.longitude_destination,
+    })
+  }
+
+  const directionServiceOptions =
+    // @ts-ignore
+    useMemo<google.maps.DirectionsRequest>(() => {
+      return {
+        origin,
+        destination,
+        waypoints,
+        travelMode: 'DRIVING',
+      }
+    }, [origin, destination])
+
+  const directionsCallback = useCallback((res: SetStateAction<null> | any) => {
+    if (res !== null && res.status === 'OK') {
+      setResponse(res)
+    } else {
+      showPopInformation('Error to generate route for this packages.', 'error')
+    }
+  }, [])
+
+  const directionsRendererOptions = useMemo<any>(() => {
+    return {
+      directions: response,
+    }
+  }, [response])
+
   return (
     <Container maxWidth="xl">
       <Grid container direction={'row'}>
@@ -175,6 +258,31 @@ const ListShipment = ({
             Add Shipment
           </Button>
         </Grid>
+      </Grid>
+      <Grid container direction={'row'}>
+        <Grid item xs={2}></Grid>
+        <Grid item xs={8}>
+          {/* <LoadScript googleMapsApiKey=""> */}
+          <LoadScript googleMapsApiKey={key}>
+            <GoogleMap
+              center={defaultLocation}
+              zoom={15}
+              mapContainerStyle={{ height: '400px', width: '800px' }}
+            >
+              {origin && destination && (
+                <DirectionsService
+                  options={directionServiceOptions}
+                  callback={directionsCallback}
+                />
+              )}
+
+              {response && directionsRendererOptions && (
+                <DirectionsRenderer options={directionsRendererOptions} />
+              )}
+            </GoogleMap>
+          </LoadScript>
+        </Grid>
+        <Grid item xs={2}></Grid>
       </Grid>
       <Grid>
         <Grid item xs={12}>
@@ -222,9 +330,8 @@ const ListShipment = ({
                         : '-'}
                     </TableCell>
                     <TableCell align="center">
-                      {row.start_route ? (
-                        '-'
-                      ) : (
+                      {checkStatus(row.start_route, row.finished_route) ===
+                      EStatusPackage.WAREHOUSE ? (
                         <Button
                           variant="contained"
                           startIcon={<LocalShippingIcon />}
@@ -232,6 +339,18 @@ const ListShipment = ({
                         >
                           Start Delivery
                         </Button>
+                      ) : checkStatus(row.start_route, row.finished_route) ===
+                        EStatusPackage.TRANSIT ? (
+                        <Button
+                          variant="contained"
+                          startIcon={<RouteIcon />}
+                          onClick={event => generateRoute(row.id)}
+                          disabled={showMap}
+                        >
+                          Generate Route
+                        </Button>
+                      ) : (
+                        '-'
                       )}
                     </TableCell>
                     {row.finished_route === null ? (
@@ -251,6 +370,7 @@ const ListShipment = ({
                                 {basicCard(
                                   pakage.latitude_destination,
                                   pakage.longitude_destination,
+                                  pakage.distance ?? 99999999,
                                   pakage.id,
                                   pakage.status_id !== EStatusPackage.DELIVERED,
                                   pakage.status_id,

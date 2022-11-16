@@ -40,6 +40,8 @@ export class PackageEntity {
   @UpdateDateColumn()
   updated_at?: Date;
 
+  distance?: number;
+
   @ManyToOne(
     () => ShipmentEntity,
     (shipment: ShipmentEntity) => shipment.packages,
