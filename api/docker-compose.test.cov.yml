@@ -3,7 +3,7 @@ services:
   app:
     build: .
     image: api-logistics-manager:dev
-    container_name: api-logistics-manager
+    container_name: api-logistics-manager-cov
     hostname: localhost
     volumes:
       - api-logistics-manager-nodemodules:/usr/src/app/node_modules

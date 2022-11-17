@@ -1,4 +1,12 @@
-import { Button, AlertColor, Grid, InputAdornment, MenuItem, TextField } from '@mui/material'
+import {
+  Button,
+  AlertColor,
+  Grid,
+  InputAdornment,
+  MenuItem,
+  TextField,
+  IconButton,
+} from '@mui/material'
 import { Container } from '@mui/system'
 import { useEffect, useState } from 'react'
 import GetAllWarehouses from '../../../../warehouses/domain/usecases/GetAllWarehouses'
@@ -8,6 +16,7 @@ import SwapVertOutlinedIcon from '@mui/icons-material/SwapVertOutlined'
 import { ILocation } from '../../../../warehouses/domain/entities/ILocation'
 import PopInformation from '../../../../../shared/components/PopInformartion'
 import AssignLocationPackage from '../../usecase/AssignLocationPackage'
+import InfoIcon from '@mui/icons-material/Info'
 
 interface Props {
   createPackage: CreatePackage
@@ -107,8 +116,16 @@ const AddPackages = ({ createPackage, listWarehouse, assignLocationPackage }: Pr
 
   return (
     <Container maxWidth="xl">
-      <Grid>
-        <Grid item xs={8}>
+      <Grid container direction={'row'}>
+        <Grid item xs={1}>
+          <IconButton
+            target={'_blank'}
+            href="https://support.google.com/maps/answer/18539?hl=en&co=GENIE.Platform%3DDesktop"
+          >
+            <InfoIcon />
+          </IconButton>
+        </Grid>
+        <Grid item xs={9}>
           <TextField
             type={'number'}
             placeholder="-26.894393"
@@ -168,7 +185,7 @@ const AddPackages = ({ createPackage, listWarehouse, assignLocationPackage }: Pr
           <Button onClick={handleSubmit}>Submit</Button>
           <Button onClick={handleReset}>Reset</Button>
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={2}>
           <PopInformation information={information} severityValue={severityInformation} />
         </Grid>
       </Grid>

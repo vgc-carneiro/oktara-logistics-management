@@ -16,10 +16,12 @@ This App is using [Make](https://www.gnu.org/software/make/manual/make.html#Over
 
 ### Unit tests:
 ```bash
+~/oktara-logistics-management$ cd api
+
 # With Make
-$ make setup
-$ make install
-$ make tests
+~/oktara-logistics-management/api$ make setup
+~/oktara-logistics-management/api$ make install
+~/oktara-logistics-management/api$ make tests
 
 # Without Make
 $ docker volume create api-logistics-manager-nodemodules
@@ -30,29 +32,33 @@ $ docker-compose -f docker-compose.test.yml up
 
 ### Check the coverage:
 ```bash
+~/oktara-logistics-management$ cd api
+
 # With Make
-$ make setup
-$ make install
-$ make cover
+~/oktara-logistics-management/api$ make setup
+~/oktara-logistics-management/api$ make install
+~/oktara-logistics-management/api$ make cover
 
 # Without Make
-$ docker volume create api-logistics-manager-nodemodules
-$ docker-compose -f docker-compose.builder.yml run --rm install
-$ docker-compose -f docker-compose.test.cov.yml up
+~/oktara-logistics-management/api$ docker volume create api-logistics-manager-nodemodules
+~/oktara-logistics-management/api$ docker-compose -f docker-compose.builder.yml run --rm install
+~/oktara-logistics-management/api$ docker-compose -f docker-compose.test.cov.yml up
 ```
 
 ## Development
 
 ```bash
+~/oktara-logistics-management$ cd api
+
 # With Make
-$ make setup
-$ make install
-$ make dev
+~/oktara-logistics-management/api$ make setup
+~/oktara-logistics-management/api$ make install
+~/oktara-logistics-management/api$ make dev
 
 # Without Make
-$ docker volume create api-logistics-manager-nodemodules
-$ docker-compose -f docker-compose.builder.yml run --rm install
-$ docker-compose -f docker-compose.dev.yml up
+~/oktara-logistics-management/api$ docker volume create api-logistics-manager-nodemodules
+~/oktara-logistics-management/api$ docker-compose -f docker-compose.builder.yml run --rm install
+~/oktara-logistics-management/api$ docker-compose -f docker-compose.dev.yml up
 ```
 
 
