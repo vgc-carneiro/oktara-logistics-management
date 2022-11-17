@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     shm_size: 4g
     ports:
-      - 5432:5432
+      - 5436:5432
     volumes:
       - './.postgres/data:/var/lib/postgresql/data:rw'
     environment:
@@ -20,7 +20,7 @@ services:
   app:
     build: .
     image: api-logistics-manager:dev
-    container_name: api-logistics-manager
+    container_name: api-logistics-manager-dev
     hostname: localhost
     links:
       - postgres
@@ -39,7 +39,7 @@ services:
       - MIGRATION_PATH=./dist/infrastructure/migrations/*.js
       - MIGRATION_TABLE=migrations
       - PATH_ENTITIES=./../**/*.entity.js
-      - ENABLE_SEED=false
+      - ENABLE_SEED=true
     command: npm run start:dev:migration
     ports:
       - 3335:3335

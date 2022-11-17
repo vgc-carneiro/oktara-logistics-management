@@ -17,8 +17,8 @@ export class WarehouseSeeder {
     const data_seeder: Warehouse[] = [
       {
         name: 'Highway warehouse borther ltd.',
-        latitude: -23.315089,
-        longitude: -51.175864,
+        latitude: 9.947525,
+        longitude: -84.121088,
       },
     ];
 

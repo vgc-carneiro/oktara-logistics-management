@@ -17,7 +17,7 @@ This project is responsible to manage the storage, inventory, and transportation
 Before the execution, there are two steps to consider:
 1. This project uses a [Google Maps API](https://developers.google.com/maps/documentation), so for the complete use of the functions developed here, you **must** put your [credential key](https://developers.google.com/maps/get-started#api-key) in the file: **./web-logistics/src/shared/components/Map/key.ts**
 
-2. The Warehouse location is: **latitude: -23.315089, longitude: -51.175864**, therefor is **strongly** recommended to use packages location near the Warehouse location.
+2. The Warehouse location is: **latitude: 9.947525, longitude: -84.121088,**, therefor is **strongly** recommended to use packages location near the Warehouse location.
 
 ### Docker
 For executing the project, you just need to run the following command:
