@@ -61,14 +61,11 @@ const ListShipment = ({
   const [openValue, setOpen] = useState(false)
   const [showMap, setShowMap] = useState(false)
   const [route, setRoute] = useState<IRouteDTO | null>(null)
-  const [origin, setOrigin] = useState<google.maps.LatLngLiteral | null>({
-    lat: -23.315089,
-    lng: -51.175864,
-  })
+  const defaultLocation: google.maps.LatLngLiteral = { lat: 9.947525, lng: -84.121088 }
+  const [origin, setOrigin] = useState<google.maps.LatLngLiteral | null>(defaultLocation)
   const [destination, setDestination] = useState<google.maps.LatLngLiteral | null>(null)
   const [waypoints, setWaypoints] = useState<google.maps.DirectionsWaypoint[] | null>(null)
   const [response, setResponse] = useState(null)
-  const defaultLocation = { lat: -23.315089, lng: -51.175864 }
   const key = GoogleMapsKey
 
   const style = {
@@ -262,7 +259,6 @@ const ListShipment = ({
       <Grid container direction={'row'}>
         <Grid item xs={2}></Grid>
         <Grid item xs={8}>
-          {/* <LoadScript googleMapsApiKey=""> */}
           <LoadScript googleMapsApiKey={key}>
             <GoogleMap
               center={defaultLocation}
